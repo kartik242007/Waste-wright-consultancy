@@ -175,6 +175,9 @@ export default function EngagementModel() {
             <h2 className="font-editorial text-display-xl text-balance">
               A single arc. <span className="text-bone/50 italic">Four disciplined phases.</span>
             </h2>
+            <p className="mt-6 max-w-xl text-[15px] leading-[1.65] text-bone/65">
+              Every Circulon engagement follows one continuous arc — from field-level diagnostics to board-level disclosure. Scroll to advance the model; the phase you're inside will always light up.
+            </p>
           </div>
           <div className="col-span-12 md:col-span-5">
             {/* Step markers */}

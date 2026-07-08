@@ -9,6 +9,7 @@ import LenisProvider from '@/components/circulon/LenisProvider'
 const HeroScene = dynamic(() => import('@/components/circulon/HeroScene'), { ssr: false, loading: () => null })
 const CircularityEngine = dynamic(() => import('@/components/circulon/CircularityEngine'), { ssr: false, loading: () => null })
 const EngagementModel = dynamic(() => import('@/components/circulon/EngagementModel'), { ssr: false, loading: () => null })
+const Credentials = dynamic(() => import('@/components/circulon/Credentials'), { ssr: false, loading: () => null })
 
 /* Loader */
 function Loader() {
@@ -464,6 +465,7 @@ function App() {
         <Services />
         <Impact />
         <EngagementModel />
+        <Credentials />
         <CaseStudy />
         <CTA />
       </main>
