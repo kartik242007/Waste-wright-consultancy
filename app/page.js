@@ -12,6 +12,7 @@ const EngagementModel = dynamic(() => import('@/components/circulon/EngagementMo
 const Credentials = dynamic(() => import('@/components/circulon/Credentials'), { ssr: false, loading: () => null })
 const WhyChooseUs = dynamic(() => import('@/components/circulon/WhyChooseUs'), { ssr: false, loading: () => null })
 const ClientVoice = dynamic(() => import('@/components/circulon/ClientVoice'), { ssr: false, loading: () => null })
+const InsightsPreview = dynamic(() => import('@/components/circulon/InsightsPreview'), { ssr: false, loading: () => null })
 
 /* Loader */
 function Loader() {
@@ -471,6 +472,7 @@ function App() {
         <Credentials />
         <CaseStudy />
         <ClientVoice />
+        <InsightsPreview />
         <CTA />
       </main>
       <Footer />
