@@ -11,6 +11,7 @@ const CircularityEngine = dynamic(() => import('@/components/circulon/Circularit
 const EngagementModel = dynamic(() => import('@/components/circulon/EngagementModel'), { ssr: false, loading: () => null })
 const Credentials = dynamic(() => import('@/components/circulon/Credentials'), { ssr: false, loading: () => null })
 const WhyChooseUs = dynamic(() => import('@/components/circulon/WhyChooseUs'), { ssr: false, loading: () => null })
+const ClientVoice = dynamic(() => import('@/components/circulon/ClientVoice'), { ssr: false, loading: () => null })
 
 /* Loader */
 function Loader() {
@@ -469,6 +470,7 @@ function App() {
         <EngagementModel />
         <Credentials />
         <CaseStudy />
+        <ClientVoice />
         <CTA />
       </main>
       <Footer />
