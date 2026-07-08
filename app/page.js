@@ -13,6 +13,7 @@ const Credentials = dynamic(() => import('@/components/circulon/Credentials'), {
 const WhyChooseUs = dynamic(() => import('@/components/circulon/WhyChooseUs'), { ssr: false, loading: () => null })
 const ClientVoice = dynamic(() => import('@/components/circulon/ClientVoice'), { ssr: false, loading: () => null })
 const InsightsPreview = dynamic(() => import('@/components/circulon/InsightsPreview'), { ssr: false, loading: () => null })
+const FAQ = dynamic(() => import('@/components/circulon/FAQ'), { ssr: false, loading: () => null })
 
 /* Loader */
 function Loader() {
@@ -473,6 +474,7 @@ function App() {
         <CaseStudy />
         <ClientVoice />
         <InsightsPreview />
+        <FAQ />
         <CTA />
       </main>
       <Footer />
