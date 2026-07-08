@@ -13,6 +13,7 @@ const CREDENTIALS = [
   { k: 'SASB',             s: 'Sustainability Accounting',icon: FileCheck2,  tint: 'bone' },
   { k: 'TCFD',             s: 'Climate Disclosures',      icon: FileCheck2,  tint: 'bone' },
   { k: 'ISSB',             s: 'IFRS S1 / S2',             icon: FileCheck2,  tint: 'signal' },
+  { k: 'BRSR',             s: 'India ESG Disclosure',     icon: FileCheck2,  tint: 'signal' },
   { k: 'Edison Award ’24', s: 'Circular Innovation',      icon: Award,       tint: 'brass' },
   { k: 'Reuters Impact ’23', s: 'Consultancy of the Year',icon: Sparkles,    tint: 'brass' },
   { k: 'B Corp',           s: 'Certified 2019 ·  Score 128', icon: Globe2,   tint: 'bone' },
