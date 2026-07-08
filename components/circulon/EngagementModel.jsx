@@ -73,7 +73,7 @@ const PHASES = [
 
 function PhaseCard({ phase, active }) {
   return (
-    <div className="w-[78vw] md:w-[52vw] lg:w-[40vw] shrink-0 pr-16 md:pr-24">
+    <div className="w-[70vw] md:w-[42vw] lg:w-[32vw] shrink-0 pr-12 md:pr-16">
       <div className={`transition-colors duration-500 ${active ? 'text-bone' : 'text-bone/40'}`}>
         <div className="flex items-center gap-4 font-mono2 text-[11px] tracking-[0.3em] uppercase">
           <span className={`inline-block h-px w-8 transition-colors duration-500 ${active ? 'bg-signal' : 'bg-bone/25'}`} />
@@ -81,7 +81,7 @@ function PhaseCard({ phase, active }) {
         </div>
 
         {/* Line-draw icon */}
-        <svg viewBox="0 0 80 80" width="120" height="120" className="mt-8" fill="none"
+        <svg viewBox="0 0 80 80" width="72" height="72" className="mt-5" fill="none"
           stroke={active ? '#4CC38A' : 'rgba(244,241,233,0.35)'}
           strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
           <g className={active ? 'phase-icon-active' : ''}>
@@ -89,10 +89,10 @@ function PhaseCard({ phase, active }) {
           </g>
         </svg>
 
-        <h3 className="mt-10 font-editorial text-6xl md:text-7xl tracking-tight">
+        <h3 className="mt-6 font-editorial text-4xl md:text-5xl tracking-tight">
           {phase.t}<span className="text-signal">.</span>
         </h3>
-        <p className={`mt-6 max-w-sm text-[15px] leading-[1.6] transition-colors duration-500 ${active ? 'text-bone/75' : 'text-bone/40'}`}>
+        <p className={`mt-3 max-w-xs text-[14px] leading-[1.55] transition-colors duration-500 ${active ? 'text-bone/75' : 'text-bone/40'}`}>
           {phase.l}
         </p>
       </div>
@@ -163,19 +163,19 @@ export default function EngagementModel() {
       ref={sectionRef}
       id="engagement-model"
       className="relative border-t border-hairline bg-pine overflow-hidden"
-      style={{ minHeight: '100vh' }}
+      style={{ height: '100vh' }}
     >
       {/* Header (fixed above the horizontal track) */}
-      <div className="container pt-24 md:pt-28 pb-10 md:pb-14">
+      <div className="container pt-14 md:pt-16 pb-6 md:pb-8">
         <div className="grid grid-cols-12 gap-6 items-end">
           <div className="col-span-12 md:col-span-7">
-            <div className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-signal font-mono2 mb-4">
+            <div className="flex items-center gap-3 text-[10px] tracking-[0.35em] uppercase text-signal font-mono2 mb-3">
               <span className="inline-block w-8 h-px bg-signal" /> 04 · Engagement Model
             </div>
-            <h2 className="font-editorial text-display-xl text-balance">
+            <h2 className="font-editorial text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.02] tracking-tight text-balance">
               A single arc. <span className="text-bone/50 italic">Four disciplined phases.</span>
             </h2>
-            <p className="mt-6 max-w-xl text-[15px] leading-[1.65] text-bone/65">
+            <p className="mt-4 max-w-lg text-[14px] leading-[1.55] text-bone/65">
               Every Circulon engagement follows one continuous arc — from field-level diagnostics to board-level disclosure. Scroll to advance the model; the phase you're inside will always light up.
             </p>
           </div>
@@ -192,7 +192,7 @@ export default function EngagementModel() {
               ))}
             </div>
             {/* Progress bar */}
-            <div className="mt-6 h-px w-full bg-hairline overflow-hidden">
+            <div className="mt-4 h-px w-full bg-hairline overflow-hidden">
               <div ref={progressRef} className="h-full w-full bg-signal origin-left" style={{ transform: 'scaleX(0)' }} />
             </div>
           </div>
@@ -204,7 +204,7 @@ export default function EngagementModel() {
         <div
           ref={trackRef}
           className="flex items-start will-change-transform pl-6 md:pl-12"
-          style={{ paddingRight: '20vw' }}
+          style={{ paddingRight: '16vw' }}
         >
           {PHASES.map((phase, i) => (
             <div key={phase.n} data-phase data-active={i === 0 ? 'true' : 'false'}>
@@ -215,9 +215,9 @@ export default function EngagementModel() {
       </div>
 
       {/* Hairline base */}
-      <div className="container pb-16 md:pb-20 pt-8">
+      <div className="container pt-6">
         <div className="hairline" />
-        <div className="mt-4 flex justify-between font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
+        <div className="mt-3 flex justify-between font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
           <span>Median engagement · 14–22 months</span>
           <span>Board-level accountability throughout</span>
         </div>

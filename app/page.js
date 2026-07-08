@@ -10,6 +10,7 @@ const HeroScene = dynamic(() => import('@/components/circulon/HeroScene'), { ssr
 const CircularityEngine = dynamic(() => import('@/components/circulon/CircularityEngine'), { ssr: false, loading: () => null })
 const EngagementModel = dynamic(() => import('@/components/circulon/EngagementModel'), { ssr: false, loading: () => null })
 const Credentials = dynamic(() => import('@/components/circulon/Credentials'), { ssr: false, loading: () => null })
+const WhyChooseUs = dynamic(() => import('@/components/circulon/WhyChooseUs'), { ssr: false, loading: () => null })
 
 /* Loader */
 function Loader() {
@@ -464,6 +465,7 @@ function App() {
         <TrustBar />
         <Services />
         <Impact />
+        <WhyChooseUs />
         <EngagementModel />
         <Credentials />
         <CaseStudy />
