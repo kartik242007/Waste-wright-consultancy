@@ -207,7 +207,7 @@ export default function AboutUs() {
               We do the parts of waste management <span className="italic text-bone/60">most firms won't.</span>
             </h2>
             <p data-au-reveal className="mt-8 max-w-xl text-[16px] leading-[1.7] text-bone/70">
-              Circulon is an Indian circular-economy and waste-diagnostics consultancy. We audit, design, and implement — from CPCB and state pollution-control-board compliance to full material recovery — for manufacturers, municipal bodies, and enterprises across India.
+              Waste Wright Consultancy is an Indian circular-economy and waste-diagnostics consultancy. We audit, design, and implement — from CPCB and state pollution-control-board compliance to full material recovery — for manufacturers, municipal bodies, and enterprises across India.
             </p>
 
             <div data-au-reveal className="mt-10 flex flex-wrap gap-3">

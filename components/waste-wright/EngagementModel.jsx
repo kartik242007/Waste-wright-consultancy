@@ -176,7 +176,7 @@ export default function EngagementModel() {
               A single arc. <span className="text-bone/50 italic">Four disciplined phases.</span>
             </h2>
             <p className="mt-4 max-w-lg text-[14px] leading-[1.55] text-bone/65">
-              Every Circulon engagement follows one continuous arc — from field-level diagnostics to board-level disclosure. Scroll to advance the model; the phase you're inside will always light up.
+              Every Waste Wright Consultancy engagement follows one continuous arc — from field-level diagnostics to board-level disclosure. Scroll to advance the model; the phase you're inside will always light up.
             </p>
           </div>
           <div className="col-span-12 md:col-span-5">

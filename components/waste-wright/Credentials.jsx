@@ -100,7 +100,7 @@ export default function Credentials() {
           </div>
           <div className="col-span-12 md:col-span-5">
             <p className="text-[15px] leading-[1.65] text-bone/65 max-w-md md:ml-auto">
-              Every standard we advise on, we hold ourselves. Below is the current attestation set governing Circulon's practice — the ones nearest the centerline are our most active certifications this year.
+              Every standard we advise on, we hold ourselves. Below is the current attestation set governing Waste Wright Consultancy's practice — the ones nearest the centerline are our most active certifications this year.
             </p>
           </div>
         </div>

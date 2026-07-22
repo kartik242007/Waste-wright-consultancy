@@ -61,7 +61,7 @@ export default function ContactForm() {
             <span className="font-mono2 text-[11px] tracking-[0.3em] uppercase">Request received</span>
           </div>
           <p className="mt-4 text-[15px] text-bone/75 leading-[1.6]">
-            A Circulon partner will reach you at <span className="text-bone">{data.email || 'your address'}</span> within one business day.
+            A Waste Wright Consultancy partner will reach you at <span className="text-bone">{data.email || 'your address'}</span> within one business day.
           </p>
         </motion.div>
       ) : (

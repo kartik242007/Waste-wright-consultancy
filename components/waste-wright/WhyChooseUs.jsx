@@ -74,7 +74,7 @@ function ReframeCard({ item, index }) {
           </div>
         </motion.div>
 
-        {/* AFTER — Circulon's reframe */}
+        {/* AFTER — Waste Wright Consultancy's reframe */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={inView ? { opacity: revealed ? 1 : 0, y: revealed ? 0 : 8 } : {}}
@@ -93,7 +93,7 @@ function ReframeCard({ item, index }) {
             })}
           </p>
           <div className="mt-6 inline-flex items-center gap-2 font-mono2 text-[10px] tracking-[0.3em] uppercase text-signal">
-            <span className="inline-block w-6 h-px bg-signal" /> Circulon
+            <span className="inline-block w-6 h-px bg-signal" /> Waste Wright
           </div>
         </motion.div>
       </div>
@@ -108,7 +108,7 @@ export default function WhyChooseUs() {
         <div className="grid grid-cols-12 gap-6 mb-14">
           <div className="col-span-12 md:col-span-7">
             <div className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-signal font-mono2 mb-4">
-              <span className="inline-block w-8 h-px bg-signal" /> 03 · Why Circulon
+              <span className="inline-block w-8 h-px bg-signal" /> 03 · Why Waste Wright
             </div>
             <h2 className="font-editorial text-display-lg text-balance">
               Four reframes. <span className="text-bone/50 italic">Zero adjectives.</span>
@@ -116,7 +116,7 @@ export default function WhyChooseUs() {
           </div>
           <div className="col-span-12 md:col-span-5">
             <p className="text-[15px] leading-[1.65] text-bone/65 max-w-md md:ml-auto">
-              The market defaults you're used to versus how Circulon is actually structured. Watch each industry assumption strike itself out, then read the model we practice instead.
+              The market defaults you're used to versus how Waste Wright Consultancy is actually structured. Watch each industry assumption strike itself out, then read the model we practice instead.
             </p>
           </div>
         </div>

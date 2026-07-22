@@ -5,9 +5,9 @@ import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { Star } from 'lucide-react'
 
 const REVIEWS = [
-  { name: 'Aditya Rao',       role: 'Textile Manufacturing',        stars: 5, q: 'Circulon took the guesswork out of our EPR compliance — from CPCB paperwork to our first BRSR filing, mapped out in weeks, not quarters.' },
+  { name: 'Aditya Rao',       role: 'Textile Manufacturing',        stars: 5, q: 'Waste Wright Consultancy took the guesswork out of our EPR compliance — from CPCB paperwork to our first BRSR filing, mapped out in weeks, not quarters.' },
   { name: 'Priya Nair',        role: 'FMCG Operations',              stars: 5, q: 'They audited three of our plants and found recovery value we didn\'t know existed. Straightforward, data-led, no fluff.' },
-  { name: 'Rohit Deshmukh',    role: 'Municipal Administration',     stars: 4, q: 'Our council needed a credible partner for the diversion targets — Circulon delivered a plan we could actually act on.' },
+  { name: 'Rohit Deshmukh',    role: 'Municipal Administration',     stars: 4, q: 'Our council needed a credible partner for the diversion targets — Waste Wright Consultancy delivered a plan we could actually act on.' },
   { name: 'Neha Kulkarni',     role: 'Electronics Recycling',        stars: 5, q: 'From e-waste licensing to full facility redesign, they handled the whole stack like an extension of our team.' },
   { name: 'Vikram Malhotra',   role: 'Auto Components',              stars: 4, q: 'Sharp, responsive, and unusually clear about costs upfront. Rare in this industry.' },
   { name: 'Ananya Iyer',       role: 'Real Estate & Construction',   stars: 5, q: 'Their compliance layer plugged straight into our ESG reporting — saved us months of back-and-forth with auditors.' },

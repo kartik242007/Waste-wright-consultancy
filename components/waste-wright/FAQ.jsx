@@ -15,7 +15,7 @@ const FAQS = [
     tag: 'Timeline',
   },
   {
-    q: 'How is Circulon priced?',
+    q: 'How is Waste Wright Consultancy priced?',
     a: 'Fixed-fee for Diagnose. Value-shared or milestone-based for Design → Deploy → Disclose. No hourly billing, ever.',
     tag: 'Commercials',
   },

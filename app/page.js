@@ -4,16 +4,16 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
-import LenisProvider from '@/components/circulon/LenisProvider'
-import ContactForm from '@/components/circulon/ContactForm'
+import LenisProvider from '@/components/waste-wright/LenisProvider'
+import ContactForm from '@/components/waste-wright/ContactForm'
 
-const HeroScene       = dynamic(() => import('@/components/circulon/HeroScene'),       { ssr: false, loading: () => null })
-const AboutUs         = dynamic(() => import('@/components/circulon/AboutUs'),         { ssr: false, loading: () => null })
-const EngagementModel = dynamic(() => import('@/components/circulon/EngagementModel'), { ssr: false, loading: () => null })
-const Credentials     = dynamic(() => import('@/components/circulon/Credentials'),     { ssr: false, loading: () => null })
-const WhyChooseUs     = dynamic(() => import('@/components/circulon/WhyChooseUs'),     { ssr: false, loading: () => null })
-const ClientVoice     = dynamic(() => import('@/components/circulon/ClientVoice'),     { ssr: false, loading: () => null })
-const FAQ             = dynamic(() => import('@/components/circulon/FAQ'),             { ssr: false, loading: () => null })
+const HeroScene       = dynamic(() => import('@/components/waste-wright/HeroScene'),       { ssr: false, loading: () => null })
+const AboutUs         = dynamic(() => import('@/components/waste-wright/AboutUs'),         { ssr: false, loading: () => null })
+const EngagementModel = dynamic(() => import('@/components/waste-wright/EngagementModel'), { ssr: false, loading: () => null })
+const Credentials     = dynamic(() => import('@/components/waste-wright/Credentials'),     { ssr: false, loading: () => null })
+const WhyChooseUs     = dynamic(() => import('@/components/waste-wright/WhyChooseUs'),     { ssr: false, loading: () => null })
+const ClientVoice     = dynamic(() => import('@/components/waste-wright/ClientVoice'),     { ssr: false, loading: () => null })
+const FAQ             = dynamic(() => import('@/components/waste-wright/FAQ'),             { ssr: false, loading: () => null })
 
 /* Loader */
 function Loader() {
@@ -33,7 +33,7 @@ function Loader() {
               <motion.circle cx="102" cy="60" r="3" fill="#C9A227"
                 initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.0, duration: 0.4 }} />
             </svg>
-            <div className="font-mono2 text-[10px] tracking-[0.35em] text-bone/50 uppercase">Circulon / Initialising</div>
+            <div className="font-mono2 text-[10px] tracking-[0.35em] text-bone/50 uppercase">Waste Wright / Initialising</div>
           </div>
         </motion.div>
       )}
@@ -52,7 +52,7 @@ function Nav() {
             <path d="M60 18 A42 42 0 0 1 102 60" stroke="#4CC38A" strokeWidth="3" fill="none" strokeLinecap="round" />
             <circle cx="102" cy="60" r="4" fill="#C9A227" />
           </svg>
-          <span className="font-editorial text-[19px] tracking-tight">Circulon<span className="text-signal">.</span></span>
+          <span className="font-editorial text-[19px] tracking-tight">Waste Wright<span className="text-signal">.</span></span>
         </a>
         <nav className="hidden md:flex items-center gap-9 text-[13px] text-bone/70">
           {[
@@ -86,7 +86,7 @@ function Hero() {
               transition={{ delay: 1.5, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
               className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-bone/60 font-mono2 mb-8">
               <span className="inline-block w-8 h-px bg-signal" />
-              Circulon Advisory Group · Est. 2024 · India
+              Waste Wright Consultancy · Est. 2024 · India
             </motion.div>
             <h1 className="font-editorial text-display-2xl text-balance">
               <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.6, duration: 0.9, ease: [0.2,0.8,0.2,1] }} className="block">Engineering</motion.span>
@@ -100,7 +100,7 @@ function Hero() {
           <div className="col-span-12 md:col-span-3 flex md:justify-end">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.3, duration: 0.8 }} className="flex flex-col gap-3">
               <a href="#about" className="btn-liquid magnetic inline-flex items-center justify-between gap-6 px-5 py-3.5 rounded-full bg-signal text-pine2 font-medium text-[14px] hover:shadow-[0_0_40px_-4px_rgba(76,195,138,0.6)] transition-shadow">
-                About Circulon <ArrowRight size={16} />
+                About Waste Wright <ArrowRight size={16} />
               </a>
               <a href="#services" className="magnetic inline-flex items-center justify-between gap-6 px-5 py-3.5 rounded-full border border-bone/25 text-[14px] hover:border-bone/60 transition-colors">
                 Our services <ArrowRight size={16} />
@@ -238,7 +238,7 @@ function CaseStudy() {
               Rebuilding a municipal corporation's waste ledger — <span className="italic text-signal">82% diversion in 18 months.</span>
             </h3>
             <p className="mt-8 text-[15px] leading-[1.7] text-bone/65 max-w-lg">
-              A tier-1 Indian municipal corporation faced mounting non-compliance risk under the Solid Waste Management Rules and rising landfill costs. Circulon designed the diagnostic protocol, modernised two material recovery facilities, and stood up a compliance data-layer feeding directly into CPCB reporting and the corporation's BRSR disclosures.
+              A tier-1 Indian municipal corporation faced mounting non-compliance risk under the Solid Waste Management Rules and rising landfill costs. Waste Wright Consultancy designed the diagnostic protocol, modernised two material recovery facilities, and stood up a compliance data-layer feeding directly into CPCB reporting and the corporation's BRSR disclosures.
             </p>
             <div className="mt-10 grid grid-cols-3 gap-6 border-t border-hairline pt-8">
               <div><div className="font-editorial text-3xl text-signal">82%</div><div className="mt-1 text-[11px] tracking-widest uppercase text-bone/45 font-mono2">Diversion</div></div>
@@ -295,7 +295,7 @@ function CTA() {
               Model your material future. <span className="italic text-bone/50">In one briefing.</span>
             </h2>
             <p className="mt-8 max-w-xl text-[16px] text-bone/65 leading-[1.7]">
-              A confidential 45-minute engagement with a Circulon partner. We'll assess your waste ledger, regulatory exposure, and circular-economy readiness — and issue a directional impact model within seven days.
+              A confidential 45-minute engagement with a Waste Wright Consultancy partner. We'll assess your waste ledger, regulatory exposure, and circular-economy readiness — and issue a directional impact model within seven days.
             </p>
             <div className="mt-10">
               <a href="#form" className="btn-liquid magnetic inline-flex items-center gap-3 px-6 py-4 rounded-full bg-signal text-pine2 font-medium text-[15px]">
@@ -307,7 +307,7 @@ function CTA() {
             <div className="mt-14 grid grid-cols-2 gap-6 border-t border-hairline pt-8 max-w-md">
               <div>
                 <div className="font-mono2 text-[10px] tracking-[0.3em] uppercase text-bone/45 mb-2">Direct line</div>
-                <div className="text-[14px] text-bone/80">partners@circulon.in</div>
+                <div className="text-[14px] text-bone/80">partners@wastewright.in</div>
                 <div className="text-[14px] text-bone/60">+91 22 6816 5100</div>
               </div>
               <div>
@@ -340,8 +340,8 @@ function Footer() {
       <div className="container">
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-12 md:col-span-5">
-            <div className="font-editorial text-4xl">Circulon<span className="text-signal">.</span></div>
-            <p className="mt-4 max-w-sm text-[13px] text-bone/55 leading-relaxed">Circulon Advisory Group is an Indian strategy and engineering consultancy in the circular economy.</p>
+            <div className="font-editorial text-4xl">Waste Wright<span className="text-signal">.</span></div>
+            <p className="mt-4 max-w-sm text-[13px] text-bone/55 leading-relaxed">Waste Wright Consultancy is an Indian strategy and engineering consultancy in the circular economy.</p>
           </div>
           <div className="col-span-6 md:col-span-2">
             <div className="font-mono2 text-[10px] tracking-widest uppercase text-bone/45 mb-4">Firm</div>
@@ -358,13 +358,13 @@ function Footer() {
           </div>
           <div className="col-span-12 md:col-span-3">
             <div className="font-mono2 text-[10px] tracking-widest uppercase text-bone/45 mb-4">Direct</div>
-            <div className="text-[13px] text-bone/75">partners@circulon.in</div>
+            <div className="text-[13px] text-bone/75">partners@wastewright.in</div>
             <div className="text-[13px] text-bone/75">+91 22 6816 5100</div>
           </div>
         </div>
         <div className="hairline my-10" />
         <div className="flex flex-col md:flex-row justify-between gap-4 font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
-          <span>© 2025 Circulon Advisory Group Pvt. Ltd.</span>
+          <span>© 2025 Waste Wright Consultancy Pvt. Ltd.</span>
           <span>ISO 14001 · GRI · SASB · TCFD · BRSR</span>
           <span>Privacy · Terms · Modern Slavery</span>
         </div>

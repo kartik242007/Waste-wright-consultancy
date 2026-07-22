@@ -1,7 +1,7 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Circulon Advisory Group — Circular Economy & Waste Intelligence',
+  title: 'Waste Wright Consultancy — Circular Economy & Waste Intelligence',
   description: 'Strategy and engineering consultancy advising governments, municipalities and Fortune 500 manufacturers on waste diagnostics, ESG reporting, and circular-economy transformation.',
 }
 
