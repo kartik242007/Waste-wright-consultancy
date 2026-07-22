@@ -13,7 +13,7 @@ const REVIEWS = [
   { name: 'Ananya Iyer',       role: 'Real Estate & Construction',   stars: 5, q: 'Their compliance layer plugged straight into our ESG reporting — saved us months of back-and-forth with auditors.' },
 ]
 
-const DWELL = 6500
+const DWELL = 5000
 
 function Stars({ count }) {
   return (
@@ -24,7 +24,7 @@ function Stars({ count }) {
           size={14}
           strokeWidth={1.25}
           className={i < count ? 'text-brass' : 'text-bone/25'}
-          fill="none"
+          fill={i < count ? 'currentColor' : 'none'}
         />
       ))}
     </span>
@@ -43,15 +43,14 @@ function Initials({ name }) {
 
 export default function ClientVoice() {
   const [i, setI] = useState(0)
-  const [paused, setPaused] = useState(false)
   const sectionRef = useRef(null)
   const inView = useInView(sectionRef, { margin: '-20% 0px -20% 0px' })
 
   useEffect(() => {
-    if (!inView || paused) return
+    if (!inView) return
     const t = setTimeout(() => setI((v) => (v + 1) % REVIEWS.length), DWELL)
     return () => clearTimeout(t)
-  }, [i, inView, paused])
+  }, [i, inView])
 
   const active = REVIEWS[i]
 
@@ -60,24 +59,22 @@ export default function ClientVoice() {
       id="client-voice"
       ref={sectionRef}
       className="relative py-28 md:py-32 border-t border-hairline overflow-hidden"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
     >
       <div className="absolute inset-0 radial-fade pointer-events-none opacity-70" />
       <div className="container relative">
         {/* Header */}
         <div className="grid grid-cols-12 gap-6 mb-14 md:mb-16">
           <div className="col-span-12 md:col-span-7">
-            <div className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-signal font-mono2 mb-4">
+            <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-4">
               <span className="inline-block w-8 h-px bg-signal" /> 07 · What our clients say
             </div>
-            <h2 className="font-editorial text-display-lg text-balance">
+            <h2 className="font-editorial text-display-lg font-semibold text-balance">
               Not a review wall. <span className="text-bone/50 italic">Six voices, on the record.</span>
             </h2>
           </div>
           <div className="col-span-12 md:col-span-5">
             <p className="text-[15px] leading-[1.65] text-bone/65 max-w-md md:ml-auto">
-              Feedback from six live engagements across India — auto-rotating; hover the card to pause. Stars are their rating of our work, kept restrained and outlined so they read as data, not decoration.
+              Feedback from six live engagements across India — auto-rotating every few seconds. Stars are their rating of our work, kept restrained and outlined so they read as data, not decoration.
             </p>
           </div>
         </div>
@@ -122,7 +119,7 @@ export default function ClientVoice() {
                 className="group relative h-6 w-10 flex items-center"
               >
                 <span className={`h-px w-full transition-colors duration-500 ${idx === i ? 'bg-signal' : 'bg-bone/20 group-hover:bg-bone/40'}`} />
-                {idx === i && !paused && (
+                {idx === i && (
                   <motion.span
                     key={i + '-fill'}
                     className="absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-signal origin-left"
@@ -137,7 +134,7 @@ export default function ClientVoice() {
           </div>
           <div className="ml-auto font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
             {String(i + 1).padStart(2, '0')} <span className="text-bone/25">/</span> {String(REVIEWS.length).padStart(2, '0')}
-            <span className="ml-4 text-bone/30">{paused ? '· Paused' : '· Auto'}</span>
+            <span className="ml-4 text-bone/30">· Auto</span>
           </div>
         </div>
       </div>

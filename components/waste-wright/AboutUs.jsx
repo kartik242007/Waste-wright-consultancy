@@ -200,10 +200,10 @@ export default function AboutUs() {
         <div className="grid grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Text block \u2014 unchanged copy + position */}
           <div className="col-span-12 lg:col-span-7">
-            <div data-au-reveal className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-signal font-mono2 mb-6">
+            <div data-au-reveal className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-6">
               <span className="inline-block w-8 h-px bg-signal" /> 01 · About Us
             </div>
-            <h2 data-au-reveal className="font-editorial text-display-lg text-balance">
+            <h2 data-au-reveal className="font-editorial text-display-lg font-semibold text-balance">
               We do the parts of waste management <span className="italic text-bone/60">most firms won't.</span>
             </h2>
             <p data-au-reveal className="mt-8 max-w-xl text-[16px] leading-[1.7] text-bone/70">

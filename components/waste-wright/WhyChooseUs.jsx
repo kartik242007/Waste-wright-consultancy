@@ -107,10 +107,10 @@ export default function WhyChooseUs() {
       <div className="container">
         <div className="grid grid-cols-12 gap-6 mb-14">
           <div className="col-span-12 md:col-span-7">
-            <div className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-signal font-mono2 mb-4">
+            <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-4">
               <span className="inline-block w-8 h-px bg-signal" /> 03 · Why Waste Wright
             </div>
-            <h2 className="font-editorial text-display-lg text-balance">
+            <h2 className="font-editorial text-display-lg font-semibold text-balance">
               Four reframes. <span className="text-bone/50 italic">Zero adjectives.</span>
             </h2>
           </div>

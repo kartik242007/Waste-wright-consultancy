@@ -169,10 +169,10 @@ export default function EngagementModel() {
       <div className="container pt-14 md:pt-16 pb-6 md:pb-8">
         <div className="grid grid-cols-12 gap-6 items-end">
           <div className="col-span-12 md:col-span-7">
-            <div className="flex items-center gap-3 text-[10px] tracking-[0.35em] uppercase text-signal font-mono2 mb-3">
+            <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-3">
               <span className="inline-block w-8 h-px bg-signal" /> 04 · Engagement Model
             </div>
-            <h2 className="font-editorial text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.02] tracking-tight text-balance">
+            <h2 className="font-editorial text-4xl md:text-5xl lg:text-[3.5rem] font-semibold leading-[1.02] tracking-tight text-balance">
               A single arc. <span className="text-bone/50 italic">Four disciplined phases.</span>
             </h2>
             <p className="mt-4 max-w-lg text-[14px] leading-[1.55] text-bone/65">

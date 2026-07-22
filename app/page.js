@@ -6,14 +6,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
 import LenisProvider from '@/components/waste-wright/LenisProvider'
 import ContactForm from '@/components/waste-wright/ContactForm'
+import LeadCaptureModal from '@/components/waste-wright/LeadCaptureModal'
+import { SERVICES } from '@/components/waste-wright/servicesData'
+import AboutUs from '@/components/waste-wright/AboutUs'
+import EngagementModel from '@/components/waste-wright/EngagementModel'
+import Credentials from '@/components/waste-wright/Credentials'
+import WhyChooseUs from '@/components/waste-wright/WhyChooseUs'
+import ClientVoice from '@/components/waste-wright/ClientVoice'
+import FAQ from '@/components/waste-wright/FAQ'
 
-const HeroScene       = dynamic(() => import('@/components/waste-wright/HeroScene'),       { ssr: false, loading: () => null })
-const AboutUs         = dynamic(() => import('@/components/waste-wright/AboutUs'),         { ssr: false, loading: () => null })
-const EngagementModel = dynamic(() => import('@/components/waste-wright/EngagementModel'), { ssr: false, loading: () => null })
-const Credentials     = dynamic(() => import('@/components/waste-wright/Credentials'),     { ssr: false, loading: () => null })
-const WhyChooseUs     = dynamic(() => import('@/components/waste-wright/WhyChooseUs'),     { ssr: false, loading: () => null })
-const ClientVoice     = dynamic(() => import('@/components/waste-wright/ClientVoice'),     { ssr: false, loading: () => null })
-const FAQ             = dynamic(() => import('@/components/waste-wright/FAQ'),             { ssr: false, loading: () => null })
+const HeroOrbit        = dynamic(() => import('@/components/waste-wright/HeroOrbit'),       { ssr: false, loading: () => null })
 
 /* Loader */
 function Loader() {
@@ -78,17 +80,17 @@ function Hero() {
     <section className="relative min-h-[100svh] pt-28 pb-24 overflow-hidden">
       <div className="absolute inset-0 radial-fade pointer-events-none" />
       <div className="absolute inset-0 noise-overlay opacity-[0.35] pointer-events-none mix-blend-overlay" />
-      <div className="absolute inset-0 -z-0 opacity-90"><Suspense fallback={null}><HeroScene /></Suspense></div>
-      <div className="container relative z-10">
+      <div className="absolute inset-0 -z-0 opacity-90"><Suspense fallback={null}><HeroOrbit /></Suspense></div>
+      <div className="container relative z-10 pointer-events-none">
         <div className="grid grid-cols-12 gap-6 items-end min-h-[80svh]">
           <div className="col-span-12 md:col-span-9">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
-              className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-bone/60 font-mono2 mb-8">
+              className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-bone/60 font-mono2 font-semibold mb-8">
               <span className="inline-block w-8 h-px bg-signal" />
               Waste Wright Consultancy · Est. 2024 · India
             </motion.div>
-            <h1 className="font-editorial text-display-2xl text-balance">
+            <h1 className="font-editorial text-display-2xl font-semibold text-balance">
               <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.6, duration: 0.9, ease: [0.2,0.8,0.2,1] }} className="block">Engineering</motion.span>
               <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.75, duration: 0.9, ease: [0.2,0.8,0.2,1] }} className="block">the end of <span className="italic text-signal">waste</span>.</motion.span>
             </h1>
@@ -98,7 +100,7 @@ function Hero() {
             </motion.p>
           </div>
           <div className="col-span-12 md:col-span-3 flex md:justify-end">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.3, duration: 0.8 }} className="flex flex-col gap-3">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.3, duration: 0.8 }} className="flex flex-col gap-3 pointer-events-auto">
               <a href="#about" className="btn-liquid magnetic inline-flex items-center justify-between gap-6 px-5 py-3.5 rounded-full bg-signal text-pine2 font-medium text-[14px] hover:shadow-[0_0_40px_-4px_rgba(76,195,138,0.6)] transition-shadow">
                 About Waste Wright <ArrowRight size={16} />
               </a>
@@ -148,27 +150,19 @@ function TrustBar() {
   )
 }
 
-/* SERVICES / Practice Areas — Compliance card localized */
-const SERVICES = [
-  { n: '01', t: 'Waste Audit & Diagnostics',         d: 'Full-stack material flow analysis, MRF sampling, and hidden-liability discovery across your facility footprint.', k: 'Diagnostics' },
-  { n: '02', t: 'Circular Economy Strategy',         d: 'Board-level roadmaps aligning product design, procurement and reverse logistics with circularity KPIs.',           k: 'Strategy' },
-  { n: '03', t: 'Regulatory & Compliance Advisory',  d: 'EPR (Plastic & E-Waste Rules), CPCB/SPCB compliance, and Solid Waste Management Rules readiness with legal-grade documentation.', k: 'Compliance' },
-  { n: '04', t: 'Digital & Tech Transformation',     d: 'IoT, computer-vision sortation and MRF automation — plus a proprietary tracking layer.',                             k: 'Technology' },
-  { n: '05', t: 'ESG Reporting & Assurance',         d: 'BRSR, GRI, SASB, TCFD, ISSB — audit-ready disclosures backed by primary data.',                                     k: 'Reporting' },
-  { n: '06', t: 'Facility Design & Optimisation',    d: 'Greenfield MRFs and retrofits engineered for throughput, purity, and unit economics.',                              k: 'Engineering' },
-]
+/* SERVICES — six real services, shared with the HeroOrbit hover-cards via servicesData.js */
 function Services() {
   return (
     <section id="services" className="py-28 md:py-36 border-t border-hairline">
       <div className="container">
         <div className="grid grid-cols-12 gap-6 mb-16">
           <div className="col-span-12 md:col-span-4">
-            <div className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-signal font-mono2 mb-4">
-              <span className="inline-block w-8 h-px bg-signal" /> 02 · Practice Areas
+            <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-4">
+              <span className="inline-block w-8 h-px bg-signal" /> 02 · Services
             </div>
           </div>
           <div className="col-span-12 md:col-span-8">
-            <h2 className="font-editorial text-display-xl text-balance">
+            <h2 className="font-editorial text-display-xl font-semibold text-balance">
               Six disciplines. <span className="text-bone/50 italic">One integrated engagement model.</span>
             </h2>
           </div>
@@ -228,13 +222,13 @@ function CaseStudy() {
   return (
     <section id="case-studies" className="py-28 md:py-36 border-t border-hairline">
       <div className="container">
-        <div className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-signal font-mono2 mb-8">
+        <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-8">
           <span className="inline-block w-8 h-px bg-signal" /> 06 · Featured Engagement
         </div>
         <div className="grid grid-cols-12 gap-10 items-center">
           <div className="col-span-12 lg:col-span-5">
             <div className="font-mono2 text-[11px] tracking-widest uppercase text-bone/50 mb-4">Case · CS-114 · Pune</div>
-            <h3 className="font-editorial text-display-lg text-balance">
+            <h3 className="font-editorial text-display-lg font-semibold text-balance">
               Rebuilding a municipal corporation's waste ledger — <span className="italic text-signal">82% diversion in 18 months.</span>
             </h3>
             <p className="mt-8 text-[15px] leading-[1.7] text-bone/65 max-w-lg">
@@ -288,10 +282,10 @@ function CTA() {
       <div className="container relative">
         <div className="grid grid-cols-12 gap-10 lg:gap-16 items-start">
           <div className="col-span-12 lg:col-span-6">
-            <div className="flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-signal font-mono2 mb-6">
+            <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-6">
               <span className="inline-block w-8 h-px bg-signal" /> Begin
             </div>
-            <h2 className="font-editorial text-display-xl text-balance">
+            <h2 className="font-editorial text-display-xl font-semibold text-balance">
               Model your material future. <span className="italic text-bone/50">In one briefing.</span>
             </h2>
             <p className="mt-8 max-w-xl text-[16px] text-bone/65 leading-[1.7]">
@@ -379,6 +373,7 @@ function App() {
       <LenisProvider />
       <Loader />
       <Nav />
+      <LeadCaptureModal />
       <main>
         <Hero />
         <AboutUs />

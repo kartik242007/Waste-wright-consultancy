@@ -101,3 +101,110 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+## user_problem_statement: "Waste Wright Consultancy" premium single-page marketing site (Indian circular-economy/e-waste consultancy). Latest batch of 5 surgical requests: (1) replace R3F HeroScene with a CSS/framer-motion HeroOrbit (extruded WW logo + orbiting service chips with hover info-cards), (2) rename "Practice Areas" to "Services" with 6 real EPR/compliance services, (3) add a scroll-triggered one-time "liquid glass" LeadCaptureModal (Radix Dialog + Select), (4) fix ClientVoice bugs (remove pause-on-hover, DWELL 6500->5000, fix Stars fill), (5) increase eyebrow/h2 heading prominence sitewide.
+
+## backend:
+  - task: "No backend changes in this session"
+    implemented: false
+    working: "NA"
+    file: "app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "This entire batch of work was frontend-only (new components, page.js edits). No API routes or MongoDB usage were touched."
+
+## frontend:
+  - task: "Replace HeroScene (R3F) with HeroOrbit (CSS/framer-motion)"
+    implemented: true
+    working: true
+    file: "components/waste-wright/HeroOrbit.jsx, app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Deleted HeroScene.jsx (R3F). Built HeroOrbit.jsx: extruded WW logo (11 stacked PNG layers w/ translateZ + brightness falloff) inside a preserve-3d wrapper with continuous rotateY/rotateX tilt; specular sweep masked to logo alpha shape; 6 orbiting glass chips computed via requestAnimationFrame cos/sin (not fixed CSS circle) with depth-based scale/opacity/z; hover opens frosted info-card (auto flip-side), pauses orbit; respects prefers-reduced-motion (freezes to static layout). Verified via screenshot: logo renders w/ tilt+glow+chips w/ correct captions; hover-card verified showing correct title/description after fixing 2 real bugs found during testing: (a) hovered chip's own z-index was capping its info-card inside a lower stacking context vs other chips - fixed by elevating hovered chip's z-index to 100; (b) hovered chip's dim orbit-phase opacity was cascading into its info-card making it near-invisible - fixed by forcing opacity:1 on hover. Also found & fixed a bigger pre-existing bug: Hero's text container had z-10 while HeroOrbit sat at z-0, so the (mostly transparent) text column's bounding box was capturing all pointer events and blocking chip hover entirely - fixed via pointer-events-none on the text container + pointer-events-auto on the 2 CTA links. Confirmed CTA links still clickable (verified '#services' anchor navigation) after this fix."
+  - task: "Rename Practice Areas -> Services, replace SERVICES content"
+    implemented: true
+    working: true
+    file: "components/waste-wright/servicesData.js, app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Created shared servicesData.js (single source of truth, also consumed by HeroOrbit hover-cards and LeadCaptureModal's Select). Eyebrow changed '02 · Practice Areas' -> '02 · Services'. Replaced all 6 SERVICES entries with the real EPR/compliance copy provided (Plastic EPR, Plastic Compliance, Battery EPR, Environmental Consultancy, Waste Tyres, Audit Support). Verified visually: all 6 ServiceCards render correct titles/kickers/descriptions, hover fill mechanic untouched."
+  - task: "Scroll-triggered one-time LeadCaptureModal (liquid glass)"
+    implemented: true
+    working: true
+    file: "components/waste-wright/LeadCaptureModal.jsx, app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "New component using Radix Dialog (components/ui/dialog.jsx) + Select (components/ui/select.jsx), restyled via className override to frosted-glass (gradient bg + backdrop-blur + hairline border + one-time entrance specular sweep). Triggers once per tab session at 45% viewport scroll via sessionStorage flag 'ww_lead_modal_shown'. Fields: name/company/phone/email (Field pattern reused from ContactForm) + Select of the 6 services. Submit shows inline 'Request received' success state matching ContactForm's pattern. Verified end-to-end via automated test: scroll-trigger fires, dropdown lists correct 6 services, form fills & submits, success state shows correct email, Escape closes it and it never reappears same session."
+  - task: "Fix ClientVoice bugs (pause-on-hover, DWELL, Stars fill)"
+    implemented: true
+    working: true
+    file: "components/waste-wright/ClientVoice.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Removed onMouseEnter/onMouseLeave pause state entirely (carousel now auto-advances regardless of cursor). Changed DWELL 6500->5000. Fixed Stars to render fill='currentColor' when i<count (was always fill='none'). Removed the now-inaccurate '· Paused' label and 'hover to pause' copy. Verified via precise timed test (continuous hover for 13s): index advanced at exactly t=4s and t=9s (5s interval) confirming DWELL=5000 and no pause-on-hover. Verified stars render filled gold for rated stars (5/5 and 4/5 cases both checked)."
+  - task: "Increase eyebrow/h2 heading prominence sitewide"
+    implemented: true
+    working: true
+    file: "app/page.js, AboutUs.jsx, WhyChooseUs.jsx, EngagementModel.jsx, Credentials.jsx, ClientVoice.jsx, FAQ.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Bumped eyebrow tags text-[11px]/text-[10px] -> text-[13px] + font-semibold (same color/tracking/icon-dash kept) across Hero, Services, CaseStudy, CTA (page.js) and AboutUs, WhyChooseUs, EngagementModel, Credentials, ClientVoice, FAQ. Added font-semibold to every section's large heading (h1/h2/h3 depending on section) without touching size classes or italic accent spans. Impact() section intentionally left untouched - it has no eyebrow/h2 element to bump (just 4 stat cards). Verified visually across all sections via screenshots."
+  - task: "Fix pre-existing insertBefore DOM crash on scroll"
+    implemented: true
+    working: true
+    file: "app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "main"
+          comment: "Discovered during rebrand verification (unrelated to that task): scrolling past the Impact section reliably crashed the whole page with 'Failed to execute insertBefore on Node' at <WhyChooseUs/>. Root cause: AboutUs/WhyChooseUs/EngagementModel/Credentials/ClientVoice/FAQ were all next/dynamic(ssr:false) siblings mounting asynchronously; EngagementModel's GSAP ScrollTrigger pin:true inserts a .pin-spacer wrapper directly into the DOM outside React's knowledge, and when a still-mounting sibling tried to insert itself into <main>, React's cached sibling reference was stale/invalid."
+        - working: true
+          agent: "main"
+          comment: "Fixed by converting those 6 components from dynamic(ssr:false) to plain top-level imports, removing the staggered-mount race entirely (all safe for SSR since their window/gsap usage is inside useEffect only). Verified via full gradual scroll-to-bottom stress test (20 steps) with zero page errors and zero 'Application error' occurrences."
+
+## metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+## test_plan:
+  current_focus:
+    - "Replace HeroScene (R3F) with HeroOrbit (CSS/framer-motion)"
+    - "Rename Practice Areas -> Services, replace SERVICES content"
+    - "Scroll-triggered one-time LeadCaptureModal (liquid glass)"
+    - "Fix ClientVoice bugs (pause-on-hover, DWELL, Stars fill)"
+    - "Increase eyebrow/h2 heading prominence sitewide"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+## agent_communication:
+    - agent: "main"
+      message: "Implemented all 5 requested changes plus fixed a pre-existing crash bug discovered mid-verification (GSAP pin/dynamic-import mount race causing insertBefore crashes). All items manually verified via extensive automated screenshot/interaction testing (documented above). This session was entirely frontend (no backend/API/DB changes), so backend testing agent is not applicable here. Requesting user confirmation before invoking deep_testing_frontend_nextjs, per protocol."
