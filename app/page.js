@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useState, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUpRight, ArrowRight } from 'lucide-react'
+import { ArrowUpRight, ArrowRight, Instagram, Facebook } from 'lucide-react'
 import LenisProvider from '@/components/waste-wright/LenisProvider'
 import ContactForm from '@/components/waste-wright/ContactForm'
 import LeadCaptureModal from '@/components/waste-wright/LeadCaptureModal'
@@ -354,6 +354,14 @@ function Footer() {
             <div className="font-mono2 text-[10px] tracking-widest uppercase text-bone/45 mb-4">Direct</div>
             <div className="text-[13px] text-bone/75">partners@wastewright.in</div>
             <div className="text-[13px] text-bone/75">+91 22 6816 5100</div>
+            <div className="mt-4 flex items-center gap-3">
+              <a href="https://instagram.com/_wastewrightconsultancy" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-hairline text-bone/70 hover:text-signal hover:border-signal/60 transition-colors">
+                <Instagram size={14} />
+              </a>
+              <a href="https://facebook.com/WasteWrightConsultancy" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-hairline text-bone/70 hover:text-signal hover:border-signal/60 transition-colors">
+                <Facebook size={14} />
+              </a>
+            </div>
           </div>
         </div>
         <div className="hairline my-10" />
