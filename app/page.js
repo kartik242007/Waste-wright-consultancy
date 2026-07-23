@@ -98,6 +98,12 @@ function Hero() {
               className="mt-10 max-w-xl text-[17px] leading-[1.65] text-bone/70">
               An Indian circular-economy and waste-diagnostics consultancy advising manufacturers, municipal bodies and enterprises — turning material liabilities into measurable balance-sheet gain.
             </motion.p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.6, duration: 0.8 }}
+              className="mt-10 flex flex-wrap gap-x-12 gap-y-4 text-[12px] font-mono2 tracking-widest uppercase text-bone/55">
+              <span>ISO 14001 Certified</span>
+              <span>GRI · SASB · TCFD · BRSR Aligned</span>
+              <span>Offices — New Delhi</span>
+            </motion.div>
           </div>
           <div className="col-span-12 md:col-span-3 flex md:justify-end">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.3, duration: 0.8 }} className="flex flex-col gap-3 pointer-events-auto">
@@ -110,12 +116,6 @@ function Hero() {
             </motion.div>
           </div>
         </div>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.6, duration: 0.8 }}
-          className="mt-16 flex flex-wrap gap-x-12 gap-y-4 text-[12px] font-mono2 tracking-widest uppercase text-bone/55">
-          <span>ISO 14001 Certified</span>
-          <span>GRI · SASB · TCFD · BRSR Aligned</span>
-          <span>Offices — New Delhi · Mumbai · Bengaluru · Pune</span>
-        </motion.div>
       </div>
     </section>
   )
