@@ -7,8 +7,6 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { SERVICES } from './servicesData'
 
-const SESSION_KEY = 'ww_lead_modal_shown'
-
 function Field({ label, name, type = 'text', required = false, value, onChange }) {
   return (
     <label className="block">
@@ -36,12 +34,12 @@ export default function LeadCaptureModal() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    if (sessionStorage.getItem(SESSION_KEY)) return
-
+    // Triggers once per page load/refresh (not persisted across sessions) —
+    // the very first scroll past ~45% of the viewport opens it, then the
+    // listener detaches so it never re-opens again on the same page load.
     const onScroll = () => {
       if (window.scrollY > window.innerHeight * 0.45) {
         setOpen(true)
-        sessionStorage.setItem(SESSION_KEY, '1')
         window.removeEventListener('scroll', onScroll)
       }
     }

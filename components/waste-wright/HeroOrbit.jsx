@@ -6,11 +6,13 @@ import { Recycle, ShieldCheck, BatteryCharging, Leaf, Disc, ClipboardCheck } fro
 import { SERVICES } from './servicesData'
 
 /* ================================================================ */
-/*  HeroOrbit — 2D/CSS pseudo-3D replacement for the old R3F hero.    */
-/*  Extruded WW mark (stacked, tilted PNG layers) with a specular     */
-/*  sweep, orbited by six glass "chips" moving on a genuine tilted    */
-/*  ellipse (cos/sin per-frame, not a fixed CSS circle) that scale,   */
-/*  brighten and z-shift as they pass in front of / behind the mark.  */
+/*  HeroOrbit — 2D/CSS pseudo-3D hero visual, shifted right to fill  */
+/*  the empty space beside the headline. Single clean/shiny WW mark  */
+/*  (no stacked "block" layers) with a soft backlit glow + a         */
+/*  specular sweep, ringed by a visible elliptical orbit track that  */
+/*  six glass "chips" travel on via genuine cos/sin motion (not a    */
+/*  fixed CSS circle) — scaling / brightening as they pass in front  */
+/*  of the mark, dimming as they pass behind it.                     */
 /* ================================================================ */
 
 const CAPTIONS = [
@@ -24,13 +26,12 @@ const CAPTIONS = [
 const ICONS = [Recycle, ShieldCheck, BatteryCharging, Leaf, Disc, ClipboardCheck]
 const BASE_ANGLES = [0, 60, 120, 180, 240, 300].map((d) => (d * Math.PI) / 180)
 const SPEED = 0.00026 // radians / ms
-const LAYERS = 11
 
 export default function HeroOrbit() {
   const [angle, setAngle] = useState(0)
   const [hoverIdx, setHoverIdx] = useState(null)
   const [reduced, setReduced] = useState(false)
-  const [radius, setRadius] = useState({ x: 190, y: 68 })
+  const [layout, setLayout] = useState({ center: { x: '70%', y: '48%' }, radius: { x: 340, y: 148 }, logo: 380 })
   const rafRef = useRef(null)
   const lastRef = useRef(null)
 
@@ -44,14 +45,28 @@ export default function HeroOrbit() {
     return () => mq.removeEventListener?.('change', onChange)
   }, [])
 
-  // Responsive orbit radius
+  // Responsive center / radius / logo size — anchored to the right on
+  // desktop to fill the space beside the headline; centered + compact on mobile.
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const mq = window.matchMedia('(max-width: 768px)')
-    const update = () => setRadius(mq.matches ? { x: 108, y: 40 } : { x: 190, y: 68 })
+    const mqTablet = window.matchMedia('(max-width: 1024px)')
+    const mqMobile = window.matchMedia('(max-width: 768px)')
+    const update = () => {
+      if (mqMobile.matches) {
+        setLayout({ center: { x: '50%', y: '54%' }, radius: { x: 118, y: 46 }, logo: 176 })
+      } else if (mqTablet.matches) {
+        setLayout({ center: { x: '62%', y: '46%' }, radius: { x: 230, y: 100 }, logo: 260 })
+      } else {
+        setLayout({ center: { x: '70%', y: '48%' }, radius: { x: 340, y: 148 }, logo: 380 })
+      }
+    }
     update()
-    mq.addEventListener?.('change', update)
-    return () => mq.removeEventListener?.('change', update)
+    mqTablet.addEventListener?.('change', update)
+    mqMobile.addEventListener?.('change', update)
+    return () => {
+      mqTablet.removeEventListener?.('change', update)
+      mqMobile.removeEventListener?.('change', update)
+    }
   }, [])
 
   // Continuous elliptical motion via requestAnimationFrame (paused on hover)
@@ -70,6 +85,8 @@ export default function HeroOrbit() {
       lastRef.current = null
     }
   }, [hoverIdx, reduced])
+
+  const { center, radius, logo } = layout
 
   const chips = useMemo(() => {
     return BASE_ANGLES.map((base, i) => {
@@ -90,79 +107,105 @@ export default function HeroOrbit() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 1.0, duration: 1.3, ease: [0.2, 0.8, 0.2, 1] }}
-      className="absolute inset-0 flex items-center justify-center"
-      style={{ perspective: '1400px' }}
+      className="absolute inset-0"
     >
-      {/* Emerald glow — matches .radial-fade color/opacity language */}
-      <div
-        aria-hidden
-        className="absolute w-[380px] h-[380px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(74,232,160,0.30) 0%, rgba(74,232,160,0) 65%)',
-          filter: 'blur(34px)',
-        }}
-      />
+      {/* Everything below anchors to this single point — moving `center`
+          moves the glow, ring, mark and orbit together as one unit. */}
+      <div className="absolute" style={{ top: center.y, left: center.x }}>
 
-      {/* Extruded WW mark */}
-      <motion.div
-        className="relative w-[128px] h-[128px] md:w-[168px] md:h-[168px]"
-        style={{ transformStyle: 'preserve-3d' }}
-        animate={reduced ? {} : { rotateY: [-15, 15, -15], rotateX: [-6, 6, -6] }}
-        transition={reduced ? {} : { duration: 8.6, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        {Array.from({ length: LAYERS }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute inset-0"
-            style={{
-              transform: `translateZ(${-i * 5}px)`,
-              filter: `brightness(${Math.max(0.32, 1 - i * 0.065)})`,
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/brand/waste-wright-mark.png"
-              alt=""
-              draggable={false}
-              className="w-full h-full object-contain select-none pointer-events-none"
-            />
-          </div>
-        ))}
-
-        {/* Specular sweep — clipped to the mark's own alpha shape */}
-        {!reduced && (
-          <motion.div
-            aria-hidden
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              transform: 'translateZ(6px)',
-              WebkitMaskImage: 'url(/brand/waste-wright-mark.png)',
-              WebkitMaskSize: 'contain',
-              WebkitMaskRepeat: 'no-repeat',
-              WebkitMaskPosition: 'center',
-              maskImage: 'url(/brand/waste-wright-mark.png)',
-              maskSize: 'contain',
-              maskRepeat: 'no-repeat',
-              maskPosition: 'center',
-              background: 'linear-gradient(105deg, transparent 32%, rgba(255,255,255,0.85) 50%, transparent 68%)',
-              mixBlendMode: 'overlay',
-            }}
-            animate={{ x: ['-55%', '55%', '-55%'] }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        )}
-      </motion.div>
-
-      {/* Orbiting service chips */}
-      {chips.map((c) => (
-        <ChipItem
-          key={c.i}
-          chip={c}
-          hovered={hoverIdx === c.i}
-          onEnter={() => setHoverIdx(c.i)}
-          onLeave={() => setHoverIdx(null)}
+        {/* Emerald glow — matches .radial-fade color/opacity language */}
+        <div
+          aria-hidden
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: radius.x * 1.65,
+            height: radius.y * 2.6,
+            top: 0,
+            left: 0,
+            transform: 'translate(-50%, -50%)',
+            background: 'radial-gradient(circle, rgba(74,232,160,0.26) 0%, rgba(74,232,160,0) 65%)',
+            filter: 'blur(40px)',
+          }}
         />
-      ))}
+
+        {/* Visible orbit track — thin elliptical ring the chips travel on */}
+        <div
+          aria-hidden
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: radius.x * 2,
+            height: radius.y * 2,
+            top: 0,
+            left: 0,
+            transform: 'translate(-50%, -50%)',
+            border: '1px solid rgba(74,232,160,0.20)',
+            boxShadow: 'inset 0 0 40px rgba(74,232,160,0.05)',
+          }}
+        />
+
+        {/* Clean single-plane WW mark — soft backlit glow + crisp mark + shine sweep.
+            Intentionally no 3D rotation here: combining rotateX/Y + perspective with
+            the masked/blended specular sweep caused a ghosting render artifact in
+            Chromium, so depth/life comes from a subtle 2D breathing scale instead. */}
+        <motion.div
+          className="absolute"
+          style={{
+            top: 0,
+            left: 0,
+            width: logo,
+            height: logo,
+            transform: 'translate(-50%, -50%)',
+          }}
+          animate={reduced ? {} : { scale: [1, 1.035, 1] }}
+          transition={reduced ? {} : { duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          {/* crisp single logo layer — no filters on the rotating plane itself
+              (avoids drop-shadow + 3D-transform rendering artifacts); glow
+              comes purely from the separate ambient radial-gradient behind it */}
+          <div className="absolute inset-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/waste-wright-mark.png" alt="Waste Wright" draggable={false} className="w-full h-full object-contain select-none pointer-events-none" />
+          </div>
+
+          {/* Specular sweep — clipped to the mark's own alpha shape. The masked
+              element itself stays perfectly static (aligned with the real logo);
+              only the gradient's background-position sweeps within that fixed
+              clip, so there is never a second moving silhouette/ghost. */}
+          {!reduced && (
+            <motion.div
+              aria-hidden
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                WebkitMaskImage: 'url(/brand/waste-wright-mark.png)',
+                WebkitMaskSize: 'contain',
+                WebkitMaskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+                maskImage: 'url(/brand/waste-wright-mark.png)',
+                maskSize: 'contain',
+                maskRepeat: 'no-repeat',
+                maskPosition: 'center',
+                backgroundImage: 'linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.95) 50%, transparent 62%)',
+                backgroundSize: '320% 100%',
+                backgroundRepeat: 'no-repeat',
+                mixBlendMode: 'overlay',
+              }}
+              animate={{ backgroundPositionX: ['-110%', '110%', '-110%'] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          )}
+        </motion.div>
+
+        {/* Orbiting service chips */}
+        {chips.map((c) => (
+          <ChipItem
+            key={c.i}
+            chip={c}
+            hovered={hoverIdx === c.i}
+            onEnter={() => setHoverIdx(c.i)}
+            onLeave={() => setHoverIdx(null)}
+          />
+        ))}
+      </div>
     </motion.div>
   )
 }
@@ -175,8 +218,8 @@ function ChipItem({ chip, hovered, onEnter, onLeave }) {
     <div
       className="absolute flex flex-col items-center gap-2 cursor-pointer"
       style={{
-        top: '50%',
-        left: '50%',
+        top: 0,
+        left: 0,
         transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${hovered ? Math.max(scale, 0.95) : scale})`,
         // Snap to full opacity while hovered so a chip that happens to be in
         // the "behind" orbit phase (dim) — and its info card — stay legible.
