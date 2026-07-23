@@ -83,7 +83,7 @@ function Hero() {
       <div className="absolute inset-0 -z-0 opacity-90"><Suspense fallback={null}><HeroOrbit /></Suspense></div>
       <div className="container relative z-10 pointer-events-none">
         <div className="grid grid-cols-12 gap-6 items-end min-h-[80svh]">
-          <div className="col-span-12 md:col-span-9">
+          <div className="col-span-12 md:col-span-9 self-center md:-translate-y-16">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
               className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-bone/60 font-mono2 font-semibold mb-8">

@@ -110,8 +110,20 @@ export default function HeroOrbit() {
       className="absolute inset-0"
     >
       {/* Everything below anchors to this single point — moving `center`
-          moves the glow, ring, mark and orbit together as one unit. */}
-      <div className="absolute" style={{ top: center.y, left: center.x }}>
+          moves the glow, ring, mark and orbit together as one unit. Uses an
+          explicit-size, self-centered wrapper (rather than a zero-size one)
+          so the logo/glow/ring are guaranteed to share one true center. */}
+      <div
+        className="absolute"
+        style={{
+          top: center.y,
+          left: center.x,
+          width: radius.x * 2,
+          height: radius.y * 2,
+          transform: 'translate(-50%, -50%)',
+          isolation: 'isolate',
+        }}
+      >
 
         {/* Emerald glow — matches .radial-fade color/opacity language */}
         <div
@@ -120,8 +132,8 @@ export default function HeroOrbit() {
           style={{
             width: radius.x * 1.65,
             height: radius.y * 2.6,
-            top: 0,
-            left: 0,
+            top: '50%',
+            left: '50%',
             transform: 'translate(-50%, -50%)',
             background: 'radial-gradient(circle, rgba(74,232,160,0.26) 0%, rgba(74,232,160,0) 65%)',
             filter: 'blur(40px)',
@@ -135,8 +147,8 @@ export default function HeroOrbit() {
           style={{
             width: radius.x * 2,
             height: radius.y * 2,
-            top: 0,
-            left: 0,
+            top: '50%',
+            left: '50%',
             transform: 'translate(-50%, -50%)',
             border: '1px solid rgba(74,232,160,0.20)',
             boxShadow: 'inset 0 0 40px rgba(74,232,160,0.05)',
@@ -147,18 +159,26 @@ export default function HeroOrbit() {
             Intentionally no 3D rotation here: combining rotateX/Y + perspective with
             the masked/blended specular sweep caused a ghosting render artifact in
             Chromium, so depth/life comes from a subtle 2D breathing scale instead. */}
-        <motion.div
+        <div
           className="absolute"
           style={{
-            top: 0,
-            left: 0,
+            top: '50%',
+            left: '50%',
             width: logo,
             height: logo,
             transform: 'translate(-50%, -50%)',
+            isolation: 'isolate',
           }}
-          animate={reduced ? {} : { scale: [1, 1.035, 1] }}
-          transition={reduced ? {} : { duration: 7, repeat: Infinity, ease: 'easeInOut' }}
         >
+          {/* Scale-breathing lives on this inner wrapper — framer-motion's
+              `animate` takes over the `transform` property entirely, which
+              was silently discarding the outer translate(-50%,-50%) centering
+              above and making the logo appear off-center from the ring. */}
+          <motion.div
+            className="absolute inset-0"
+            animate={reduced ? {} : { scale: [1, 1.035, 1] }}
+            transition={reduced ? {} : { duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          >
           {/* crisp single logo layer — no filters on the rotating plane itself
               (avoids drop-shadow + 3D-transform rendering artifacts); glow
               comes purely from the separate ambient radial-gradient behind it */}
@@ -193,7 +213,8 @@ export default function HeroOrbit() {
               transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
             />
           )}
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* Orbiting service chips */}
         {chips.map((c) => (
@@ -213,13 +234,17 @@ export default function HeroOrbit() {
 function ChipItem({ chip, hovered, onEnter, onLeave }) {
   const { x, y, scale, opacity, z, caption, service, Icon } = chip
   const flipLeft = x > 15
+  // Vertical anchor: near the top/bottom of the orbit, anchor the card to the
+  // chip's near edge (so it grows toward the open side of the viewport)
+  // instead of always centering it, which previously let it run off-screen.
+  const vAnchor = y < -40 ? 'top-0' : y > 40 ? 'bottom-0' : 'top-1/2 -translate-y-1/2'
 
   return (
     <div
       className="absolute flex flex-col items-center gap-2 cursor-pointer"
       style={{
-        top: 0,
-        left: 0,
+        top: '50%',
+        left: '50%',
         transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${hovered ? Math.max(scale, 0.95) : scale})`,
         // Snap to full opacity while hovered so a chip that happens to be in
         // the "behind" orbit phase (dim) — and its info card — stay legible.
@@ -247,7 +272,7 @@ function ChipItem({ chip, hovered, onEnter, onLeave }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 4 }}
             transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
-            className={`absolute top-1/2 -translate-y-1/2 ${flipLeft ? 'right-full mr-4' : 'left-full ml-4'} w-64 rounded-lg border border-bone/20 p-5 overflow-hidden`}
+            className={`absolute ${vAnchor} ${flipLeft ? 'right-full mr-4' : 'left-full ml-4'} w-64 rounded-lg border border-bone/20 p-5 overflow-hidden`}
             style={{
               background: 'linear-gradient(135deg, rgba(18,42,30,0.88), rgba(10,31,22,0.78))',
               backdropFilter: 'blur(18px)',

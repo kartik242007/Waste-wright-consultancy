@@ -187,6 +187,20 @@
         - working: true
           agent: "main"
           comment: "Fixed by converting those 6 components from dynamic(ssr:false) to plain top-level imports, removing the staggered-mount race entirely (all safe for SSR since their window/gsap usage is inside useEffect only). Verified via full gradual scroll-to-bottom stress test (20 steps) with zero page errors and zero 'Application error' occurrences."
+  - task: "Fix HeroOrbit logo centering, checkered background, hover-card clipping, hero text position"
+    implemented: true
+    working: true
+    file: "components/waste-wright/HeroOrbit.jsx, app/page.js, public/brand/waste-wright-mark.png"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "4 targeted fixes: (1) logo now pixel-exact centered on the orbit ring (was offset by half its own box size due to a framer-motion animate/style.transform conflict). (2) Removed a checkered/grid artifact caused by ~198k faint non-zero low-alpha pixels baked into the source PNG's transparent regions — thresholded and overwrote the file. (3) Hover info-cards on orbit chips now anchor top/bottom based on the chip's vertical orbit position so they never render off-screen near the top/bottom edges (verified both cases manually). (4) Hero text block (eyebrow/headline/paragraph) shifted upward via self-center + -translate-y-16 to close the top gap, without moving the CTA button column. All verified manually via screenshots/DOM measurements; needs_retesting=true per protocol requiring testing_agent verification before close."
+        - working: true
+          agent: "testing"
+          comment: "✅ ALL 4 FIXES VERIFIED on desktop viewport (1920x900) with prefers-reduced-motion enabled: (1) Logo Centering: Logo positioned at (1344, 484.8) and visually centered within the elliptical orbit ring - chips evenly distributed around it. (2) Clean Background: Close-up screenshot confirms logo has perfectly clean transparent background with no checkered/grid pattern - alpha thresholding fix successful. (3) Hover Cards Not Clipped: Tested upper chip (Waste Tyres, y=-93.4px, card bounds 318.9-623.7) and lower chip (Plastic Compliance, y=163.0px, card bounds 301.7-659.0) - both cards fully visible within 0-900 viewport, no clipping at top/bottom/left/right edges. Vertical anchor heuristic working correctly. (4) Hero Text Position: Eyebrow text 'WASTE WRIGHT CONSULTANCY · EST. 2024 · INDIA' positioned appropriately near top with no excessive empty space above it. General sanity check: scrolled through entire page, zero console errors, all functionality working. All 6 chips detected and frozen in correct positions with prefers-reduced-motion."
 
 ## metadata:
   created_by: "main_agent"
@@ -196,11 +210,7 @@
 
 ## test_plan:
   current_focus:
-    - "Replace HeroScene (R3F) with HeroOrbit (CSS/framer-motion)"
-    - "Rename Practice Areas -> Services, replace SERVICES content"
-    - "Scroll-triggered one-time LeadCaptureModal (liquid glass)"
-    - "Fix ClientVoice bugs (pause-on-hover, DWELL, Stars fill)"
-    - "Increase eyebrow/h2 heading prominence sitewide"
+    - "Fix HeroOrbit logo centering, checkered background, hover-card clipping, hero text position"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -210,3 +220,7 @@
       message: "Implemented all 5 requested changes plus fixed a pre-existing crash bug discovered mid-verification (GSAP pin/dynamic-import mount race causing insertBefore crashes). All items manually verified via extensive automated screenshot/interaction testing (documented above). This session was entirely frontend (no backend/API/DB changes), so backend testing agent is not applicable here. Requesting user confirmation before invoking deep_testing_frontend_nextjs, per protocol."
     - agent: "main"
       message: "Follow-up round: (1) Repositioned/enlarged HeroOrbit to the right side of the hero to fill empty space per user-provided reference, added a visible elliptical orbit-track ring, and removed the old 11-layer 'extrusion stack' logo rendering that the user called a 'block sequence' background. (2) Deleted the 2 confirmed-unused files (CircularityEngine.jsx, InsightsPreview.jsx). (3) Fixed LeadCaptureModal to reappear on every page refresh (removed sessionStorage persistence, now uses in-memory-only gating so it still only fires once per page load but resets every reload) per explicit user request. During the HeroOrbit redesign, found and fixed a genuine logic bug: the specular sweep was animating the masked DIV's own `x`/translateX (so the whole masked silhouette physically slid across the screen, creating a moving duplicate/ghost of the logo overlapping the real one) instead of animating the gradient's background-position within a static mask. Fixed by keeping the masked element static and animating backgroundPositionX instead — verified clean across the full animation cycle (6 sampled frames, zero ghosting). Also removed the 3D rotateY/rotateX tilt (replaced with a subtle 2D breathing scale) since perspective+3D-rotation was an initial red herring during debugging but is no longer needed/present in the final implementation."
+    - agent: "main"
+      message: "Targeted bug-fix round (4 issues reported by user on HeroOrbit + Hero text): (1) Logo-vs-ring centering bug — root cause: framer-motion's `animate={{scale}}` on the same element as a static `style.transform: translate(-50%,-50%)` fully overrides/discards that static transform, so the logo box's top-left corner (not its center) was landing on the anchor point, offsetting it by exactly half its own size. Fixed by moving the scale-breathing animation to an inner child div, leaving the outer centering div as plain CSS. Verified via exact DOM measurement: logo center and ring center both now (1344, 553.9) — pixel-identical. (2) Checkered/blocked logo background — root cause: the source PNG (`public/brand/waste-wright-mark.png`) had ~198k pixels with faint non-zero low-alpha noise (values like 3/9/12/15 instead of true 0) baked into its nominally-transparent regions from its original export, which composited into a visible grid-like artifact against the dark hero background. Fixed by thresholding the alpha channel (any alpha < 60 forced to 0) directly on the PNG file and overwriting it in place; verified clean on the live page (rendering the actual page, not the standalone image URL — navigating to the raw PNG URL directly is misleading since Chromium's standalone image viewer always shows its own gray backdrop regardless of real transparency, which briefly confused verification). (3) Hover-card off-screen clipping — added a vertical anchor heuristic (chip y < -40 → anchor card top-0 growing downward, y > 40 → anchor bottom-0 growing upward, else vertically centered) alongside the existing horizontal flip, verified for both a top-half chip (Waste Tyres) and a bottom-half chip (Battery EPR) via prefers-reduced-motion emulation (freezes chips at fixed angles for reliable testing) — both render fully on-screen. (4) Hero text block shifted upward — changed the text column from the row's default `items-end` alignment to `self-center md:-translate-y-16`, closing the empty gap at the top of the hero without affecting the CTA button column's position. Requesting deep_testing_frontend_nextjs verification of all 4 fixes before considering this closed."
+    - agent: "testing"
+      message: "Completed comprehensive verification of all 4 HeroOrbit bug fixes on desktop viewport (1920x900). All fixes PASSED: (1) Logo is pixel-centered within orbit ring, (2) Logo background is clean with no checkered pattern, (3) Hover cards for both upper and lower chips are fully visible without clipping, (4) Hero text positioned appropriately with no excessive top gap. Zero console errors detected. Page functionality confirmed working correctly. Task ready for closure."
