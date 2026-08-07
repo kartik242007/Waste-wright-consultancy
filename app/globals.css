@@ -20,6 +20,15 @@
       linear-gradient(180deg, #0A1F16 0%, #0C2419 60%, #0A1F16 100%);
     background-attachment: fixed;
   }
+  /* Backstop only — every known overflow source is fixed at its origin. This
+     exists so a future one degrades into a clipped edge instead of a
+     horizontally-jammed page. `clip` rather than `hidden` on purpose: `hidden`
+     would turn body into a scroll container and break the GSAP ScrollTrigger
+     pin in EngagementModel plus Lenis' smooth scroll. */
+  body { overflow-x: clip; }
+  @supports not (overflow: clip) {
+    body { overflow-x: hidden; }
+  }
   ::selection { background: #4AE8A0; color: #05170F; }
   * { border-color: rgba(244,241,233,0.10); }
 }

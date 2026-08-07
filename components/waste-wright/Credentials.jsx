@@ -88,9 +88,9 @@ export default function Credentials() {
 
   return (
     <section id="credentials" className="relative py-24 md:py-28 border-t border-hairline overflow-hidden">
-      <div className="container mb-14">
-        <div className="grid grid-cols-12 gap-6 items-end">
-          <div className="col-span-12 md:col-span-7">
+      <div className="container mb-10 sm:mb-14">
+        <div className="grid grid-cols-12 gap-y-6 gap-x-0 md:gap-6 items-end">
+          <div className="col-span-12 md:col-span-7 min-w-0">
             <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-4">
               <span className="inline-block w-8 h-px bg-signal" /> 05 · Credentials & Recognition
             </div>
@@ -98,7 +98,7 @@ export default function Credentials() {
               Independently attested. <span className="text-bone/50 italic">Repeatedly awarded.</span>
             </h2>
           </div>
-          <div className="col-span-12 md:col-span-5">
+          <div className="col-span-12 md:col-span-5 min-w-0">
             <p className="text-[15px] leading-[1.65] text-bone/65 max-w-md md:ml-auto">
               Every standard we advise on, we hold ourselves. Below is the current attestation set governing Waste Wright Consultancy's practice — the ones nearest the centerline are our most active certifications this year.
             </p>
@@ -131,7 +131,7 @@ export default function Credentials() {
         </div>
       </div>
 
-      <div className="container mt-14 flex justify-between font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
+      <div className="container mt-10 sm:mt-14 flex flex-col gap-2 sm:flex-row sm:justify-between font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
         <span>{CREDENTIALS.length} active attestations</span>
         <span>Audit register available on request</span>
       </div>

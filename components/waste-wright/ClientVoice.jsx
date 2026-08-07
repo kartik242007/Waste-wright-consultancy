@@ -63,7 +63,7 @@ export default function ClientVoice() {
       <div className="absolute inset-0 radial-fade pointer-events-none opacity-70" />
       <div className="container relative">
         {/* Header */}
-        <div className="grid grid-cols-12 gap-6 mb-14 md:mb-16">
+        <div className="grid grid-cols-12 gap-y-6 gap-x-0 md:gap-6 mb-14 md:mb-16">
           <div className="col-span-12 md:col-span-7">
             <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-4">
               <span className="inline-block w-8 h-px bg-signal" /> 07 · What our clients say

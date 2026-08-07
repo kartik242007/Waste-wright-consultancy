@@ -44,13 +44,13 @@ function ReframeCard({ item, index }) {
   }, [inView, start])
 
   return (
-    <div ref={ref} className="col-span-12 md:col-span-6 lg:col-span-3 bg-pine p-8 md:p-10 min-h-[300px] flex flex-col justify-between">
+    <div ref={ref} className="col-span-12 md:col-span-6 lg:col-span-3 min-w-0 bg-pine p-6 sm:p-8 md:p-10 min-h-[260px] sm:min-h-[300px] flex flex-col justify-between">
       <div className="flex items-center justify-between font-mono2 text-[10px] tracking-[0.3em] uppercase text-bone/45">
         <span>{item.n}</span>
         <span>{item.tag}</span>
       </div>
 
-      <div className="mt-14 relative">
+      <div className="mt-10 sm:mt-14 relative">
         {/* BEFORE — industry default */}
         <motion.div
           initial={{ opacity: 0, y: 6 }}
@@ -59,7 +59,7 @@ function ReframeCard({ item, index }) {
           className="absolute inset-0"
         >
           <div className="relative inline-block">
-            <p className="font-editorial text-[22px] md:text-[24px] leading-[1.2] text-bone/45 text-balance pr-2">
+            <p className="font-editorial text-[20px] sm:text-[22px] md:text-[24px] leading-[1.2] text-bone/45 text-balance pr-2">
               {item.before}
             </p>
             {/* Animated strike-through */}
@@ -81,7 +81,7 @@ function ReframeCard({ item, index }) {
           transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
           className="relative"
         >
-          <p className="font-editorial text-[24px] md:text-[26px] leading-[1.2] text-bone text-balance">
+          <p className="font-editorial text-[21px] sm:text-[24px] md:text-[26px] leading-[1.2] text-bone text-balance">
             {item.after.split(' ').map((w, i, arr) => {
               // last 2–3 words highlighted in signal
               const highlight = i >= arr.length - 3
@@ -105,8 +105,8 @@ export default function WhyChooseUs() {
   return (
     <section id="why-us" className="relative py-24 md:py-28 border-t border-hairline">
       <div className="container">
-        <div className="grid grid-cols-12 gap-6 mb-14">
-          <div className="col-span-12 md:col-span-7">
+        <div className="grid grid-cols-12 gap-y-6 gap-x-0 md:gap-6 mb-10 sm:mb-14">
+          <div className="col-span-12 md:col-span-7 min-w-0">
             <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-4">
               <span className="inline-block w-8 h-px bg-signal" /> 03 · Why Waste Wright
             </div>
@@ -114,7 +114,7 @@ export default function WhyChooseUs() {
               Four reframes. <span className="text-bone/50 italic">Zero adjectives.</span>
             </h2>
           </div>
-          <div className="col-span-12 md:col-span-5">
+          <div className="col-span-12 md:col-span-5 min-w-0">
             <p className="text-[15px] leading-[1.65] text-bone/65 max-w-md md:ml-auto">
               The market defaults you're used to versus how Waste Wright Consultancy is actually structured. Watch each industry assumption strike itself out, then read the model we practice instead.
             </p>
@@ -128,7 +128,7 @@ export default function WhyChooseUs() {
           ))}
         </div>
 
-        <div className="mt-8 flex justify-between font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
+        <div className="mt-8 flex flex-col gap-2 sm:flex-row sm:justify-between font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
           <span>Applies to every engagement · No exceptions</span>
           <span>Documented in the Master Services Agreement</span>
         </div>
