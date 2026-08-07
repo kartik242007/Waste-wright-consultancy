@@ -44,16 +44,18 @@ function Item({ item, index, open, onToggle }) {
       />
       <button
         onClick={onToggle}
-        className="w-full text-left flex items-start md:items-center gap-6 py-7 md:py-8 px-4 md:px-8"
+        className="w-full text-left flex items-start md:items-center gap-3 sm:gap-6 py-6 sm:py-7 md:py-8 px-2 sm:px-4 md:px-8"
         aria-expanded={open}
       >
         {/* Row number */}
-        <span className="font-mono2 text-[11px] tracking-[0.3em] uppercase text-bone/40 pt-1 md:pt-0 w-8 shrink-0">
+        <span className="font-mono2 text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-bone/40 pt-1 md:pt-0 w-5 sm:w-8 shrink-0">
           {String(index + 1).padStart(2, '0')}
         </span>
 
-        {/* Question */}
-        <h3 className={`flex-1 font-editorial text-2xl md:text-3xl lg:text-[2rem] leading-tight tracking-tight transition-colors duration-500 ${open ? 'text-bone' : 'text-bone/85 group-hover:text-bone'}`}>
+        {/* Question — the row spent ~116px on chrome, leaving barely 120px for
+            the question itself at 320px. Tighter gutters + a smaller step
+            below sm give it roughly double the measure. */}
+        <h3 className={`flex-1 min-w-0 font-editorial text-xl sm:text-2xl md:text-3xl lg:text-[2rem] leading-tight tracking-tight transition-colors duration-500 ${open ? 'text-bone' : 'text-bone/85 group-hover:text-bone'}`}>
           {item.q}
         </h3>
 
@@ -63,7 +65,7 @@ function Item({ item, index, open, onToggle }) {
         </span>
 
         {/* Plus / minus */}
-        <span className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-hairline group-hover:border-bone/40 transition-colors">
+        <span className="relative inline-flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full border border-hairline group-hover:border-bone/40 transition-colors">
           <span className="absolute inset-x-2 h-px bg-bone/80" />
           <motion.span
             aria-hidden
@@ -93,14 +95,14 @@ function Item({ item, index, open, onToggle }) {
             transition={{ duration: 0.55, ease: [0.7, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <div className="pl-4 md:pl-20 pr-4 md:pr-8 pb-8 md:pb-10 grid grid-cols-12 gap-6">
-              <div className="col-span-12 md:col-span-8">
-                <p className="text-[16px] md:text-[17px] leading-[1.6] text-bone/75 max-w-2xl">
+            <div className="pl-2 sm:pl-4 md:pl-20 pr-2 sm:pr-4 md:pr-8 pb-7 sm:pb-8 md:pb-10 grid grid-cols-12 gap-y-4 gap-x-0 md:gap-6">
+              <div className="col-span-12 md:col-span-8 min-w-0">
+                <p className="text-[15px] sm:text-[16px] md:text-[17px] leading-[1.6] text-bone/75 max-w-2xl">
                   {item.a}
                 </p>
               </div>
-              <div className="col-span-12 md:col-span-4 flex md:justify-end items-end">
-                <a href="#contact" className="inline-flex items-center gap-2 font-mono2 text-[11px] tracking-[0.3em] uppercase text-signal border-b border-signal/40 pb-1 hover:gap-3 transition-all">
+              <div className="col-span-12 md:col-span-4 min-w-0 flex md:justify-end items-end">
+                <a href="#contact" className="inline-flex items-center gap-2 font-mono2 text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-signal border-b border-signal/40 pb-1 min-h-[44px] md:min-h-0 hover:gap-3 transition-all">
                   Ask a partner directly →
                 </a>
               </div>
@@ -119,8 +121,8 @@ export default function FAQ() {
     <section id="faq" className="relative py-24 md:py-28 border-t border-hairline">
       <div className="container">
         {/* Header */}
-        <div className="grid grid-cols-12 gap-6 mb-14 md:mb-16 items-end">
-          <div className="col-span-12 md:col-span-7">
+        <div className="grid grid-cols-12 gap-y-6 gap-x-0 md:gap-6 mb-10 sm:mb-14 md:mb-16 items-end">
+          <div className="col-span-12 md:col-span-7 min-w-0">
             <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-4">
               <span className="inline-block w-8 h-px bg-signal" /> 08 · Before You Book
             </div>
@@ -128,7 +130,7 @@ export default function FAQ() {
               Five questions. <span className="text-bone/50 italic">Five short answers.</span>
             </h2>
           </div>
-          <div className="col-span-12 md:col-span-5">
+          <div className="col-span-12 md:col-span-5 min-w-0">
             <p className="text-[15px] leading-[1.65] text-bone/65 max-w-md md:ml-auto">
               The handful of things enterprise buyers ask before scheduling a partner briefing — answered on the record, without the boilerplate. If yours isn't here, the closing CTA below opens a direct line.
             </p>

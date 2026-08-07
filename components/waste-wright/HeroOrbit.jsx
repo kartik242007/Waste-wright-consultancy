@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Recycle, ShieldCheck, BatteryCharging, Leaf, Disc, ClipboardCheck } from 'lucide-react'
+import { Recycle, ShieldCheck, BatteryCharging, Leaf, Disc, ClipboardCheck, X } from 'lucide-react'
 import { SERVICES } from './servicesData'
 
 /* ================================================================ */
@@ -32,8 +33,17 @@ export default function HeroOrbit() {
   const [hoverIdx, setHoverIdx] = useState(null)
   const [reduced, setReduced] = useState(false)
   const [layout, setLayout] = useState({ center: { x: '70%', y: '48%' }, radius: { x: 340, y: 148 }, logo: 380 })
+  // `compact` = ≤768px: tighter orbit + wrapping captions sized to the chip.
+  // `belowLg` = <1024px: the hover flyout is unreachable on touch, so the
+  // detail card is presented as a tap-opened sheet instead. At exactly 1024px
+  // both stay false-side/desktop so `lg:` and up renders exactly as before.
+  const [compact, setCompact] = useState(false)
+  const [belowLg, setBelowLg] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const rafRef = useRef(null)
   const lastRef = useRef(null)
+
+  useEffect(() => { setMounted(true) }, [])
 
   // Respect prefers-reduced-motion — freeze into a static, legible layout
   useEffect(() => {
@@ -51,21 +61,28 @@ export default function HeroOrbit() {
     if (typeof window === 'undefined') return
     const mqTablet = window.matchMedia('(max-width: 1024px)')
     const mqMobile = window.matchMedia('(max-width: 768px)')
+    const mqBelowLg = window.matchMedia('(max-width: 1023.98px)')
     const update = () => {
       if (mqMobile.matches) {
-        setLayout({ center: { x: '50%', y: '54%' }, radius: { x: 118, y: 46 }, logo: 176 })
+        // Taller/rounder ellipse than before so the three chip rows clear each
+        // other vertically once captions are allowed to wrap (see ChipItem).
+        setLayout({ center: { x: '50%', y: '84%' }, radius: { x: 112, y: 86 }, logo: 150 })
       } else if (mqTablet.matches) {
         setLayout({ center: { x: '62%', y: '46%' }, radius: { x: 230, y: 100 }, logo: 260 })
       } else {
         setLayout({ center: { x: '70%', y: '48%' }, radius: { x: 340, y: 148 }, logo: 380 })
       }
+      setCompact(mqMobile.matches)
+      setBelowLg(mqBelowLg.matches)
     }
     update()
     mqTablet.addEventListener?.('change', update)
     mqMobile.addEventListener?.('change', update)
+    mqBelowLg.addEventListener?.('change', update)
     return () => {
       mqTablet.removeEventListener?.('change', update)
       mqMobile.removeEventListener?.('change', update)
+      mqBelowLg.removeEventListener?.('change', update)
     }
   }, [])
 
@@ -221,17 +238,82 @@ export default function HeroOrbit() {
           <ChipItem
             key={c.i}
             chip={c}
+            compact={compact}
+            belowLg={belowLg}
             hovered={hoverIdx === c.i}
             onEnter={() => setHoverIdx(c.i)}
             onLeave={() => setHoverIdx(null)}
           />
         ))}
       </div>
+
+      {/* Touch/small-viewport detail sheet — the `w-64` side flyout has nowhere
+          to render beside a 112px-radius orbit, and hover doesn't exist on
+          touch. Same card content, same framer-motion timing, presented as a
+          full-width bottom sheet instead. Portalled to <body> so it escapes the
+          hero's transformed/opacity-reduced ancestors. */}
+      {mounted && belowLg && createPortal(
+        <AnimatePresence>
+          {hoverIdx !== null && (
+            <motion.div
+              className="fixed inset-0 z-[90] flex items-end lg:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
+            >
+              <button
+                type="button"
+                aria-label="Close service detail"
+                className="absolute inset-0 bg-pine/60 backdrop-blur-[2px]"
+                onClick={() => setHoverIdx(null)}
+              />
+              <motion.div
+                role="dialog"
+                aria-label={SERVICES[hoverIdx].t}
+                initial={{ opacity: 0, scale: 0.94, y: 6 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96, y: 4 }}
+                transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
+                className="relative w-full rounded-t-lg border-t border-x border-bone/20 p-6 pb-8 overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(18,42,30,0.96), rgba(10,31,22,0.92))',
+                  backdropFilter: 'blur(18px)',
+                  paddingBottom: 'calc(2rem + env(safe-area-inset-bottom))',
+                }}
+              >
+                <motion.span
+                  aria-hidden
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)' }}
+                  initial={{ x: '-120%' }}
+                  animate={{ x: '120%' }}
+                  transition={{ duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
+                />
+                <button
+                  type="button"
+                  aria-label="Close"
+                  onClick={() => setHoverIdx(null)}
+                  className="absolute top-3 right-3 inline-flex h-11 w-11 items-center justify-center rounded-full border border-bone/20 text-bone/70"
+                >
+                  <X size={16} />
+                </button>
+                <div className="relative pr-12">
+                  <div className="font-mono2 text-[10px] tracking-[0.25em] uppercase text-signal mb-2">{SERVICES[hoverIdx].k}</div>
+                  <div className="font-editorial text-xl text-bone leading-snug mb-2">{SERVICES[hoverIdx].t}</div>
+                  <p className="text-[13px] leading-[1.6] text-bone/70">{SERVICES[hoverIdx].d}</p>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </motion.div>
   )
 }
 
-function ChipItem({ chip, hovered, onEnter, onLeave }) {
+function ChipItem({ chip, hovered, onEnter, onLeave, compact, belowLg }) {
   const { x, y, scale, opacity, z, caption, service, Icon } = chip
   const flipLeft = x > 15
   // Vertical anchor: near the top/bottom of the orbit, anchor the card to the
@@ -254,19 +336,34 @@ function ChipItem({ chip, hovered, onEnter, onLeave }) {
         // trapped behind a sibling chip that has a higher base z-index.
         zIndex: hovered ? 100 : z,
       }}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      onClick={onEnter}
+      onMouseEnter={belowLg ? undefined : onEnter}
+      onMouseLeave={belowLg ? undefined : onLeave}
+      onClick={hovered && belowLg ? onLeave : onEnter}
     >
-      <div className="relative h-[58px] w-[58px] rounded-full border border-bone/25 bg-bone/10 backdrop-blur-md flex items-center justify-center text-bone shadow-[0_6px_24px_-6px_rgba(0,0,0,0.5)]">
-        <Icon size={20} strokeWidth={1.6} />
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label={`${service.t} — view detail`}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onEnter() } }}
+        className={`relative rounded-full border border-bone/25 bg-bone/10 backdrop-blur-md flex items-center justify-center text-bone shadow-[0_6px_24px_-6px_rgba(0,0,0,0.5)] ${compact ? 'h-12 w-12' : 'h-[58px] w-[58px]'}`}
+      >
+        <Icon size={compact ? 18 : 20} strokeWidth={1.6} />
       </div>
-      <span className="font-mono2 text-[9px] tracking-[0.18em] uppercase text-bone/75 text-center whitespace-nowrap">
+      {/* Captions wrap inside a fixed box on mobile — `whitespace-nowrap` at a
+          112px orbit radius ran "Environmental Consultancy" straight off the
+          viewport and into its neighbours. */}
+      <span
+        className={
+          compact
+            ? 'font-mono2 text-[8px] leading-[1.25] tracking-[0.1em] uppercase text-bone/75 text-center w-[76px]'
+            : 'font-mono2 text-[9px] tracking-[0.18em] uppercase text-bone/75 text-center whitespace-nowrap'
+        }
+      >
         {caption}
       </span>
 
       <AnimatePresence>
-        {hovered && (
+        {hovered && !belowLg && (
           <motion.div
             initial={{ opacity: 0, scale: 0.94, y: 6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

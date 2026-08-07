@@ -73,15 +73,15 @@ const PHASES = [
 
 function PhaseCard({ phase, active }) {
   return (
-    <div className="w-[70vw] md:w-[42vw] lg:w-[32vw] shrink-0 pr-12 md:pr-16">
+    <div className="w-[80vw] sm:w-[70vw] md:w-[42vw] lg:w-[32vw] shrink-0 pr-8 sm:pr-12 md:pr-16">
       <div className={`transition-colors duration-500 ${active ? 'text-bone' : 'text-bone/40'}`}>
-        <div className="flex items-center gap-4 font-mono2 text-[11px] tracking-[0.3em] uppercase">
+        <div className="flex items-center gap-3 sm:gap-4 font-mono2 text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase">
           <span className={`inline-block h-px w-8 transition-colors duration-500 ${active ? 'bg-signal' : 'bg-bone/25'}`} />
           <span>{phase.n} · Phase</span>
         </div>
 
         {/* Line-draw icon */}
-        <svg viewBox="0 0 80 80" width="72" height="72" className="mt-5" fill="none"
+        <svg viewBox="0 0 80 80" className="mt-5 h-14 w-14 sm:h-[72px] sm:w-[72px]" fill="none"
           stroke={active ? '#4CC38A' : 'rgba(244,241,233,0.35)'}
           strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
           <g className={active ? 'phase-icon-active' : ''}>
@@ -89,10 +89,10 @@ function PhaseCard({ phase, active }) {
           </g>
         </svg>
 
-        <h3 className="mt-6 font-editorial text-4xl md:text-5xl tracking-tight">
+        <h3 className="mt-5 sm:mt-6 font-editorial text-3xl sm:text-4xl md:text-5xl tracking-tight">
           {phase.t}<span className="text-signal">.</span>
         </h3>
-        <p className={`mt-3 max-w-xs text-[14px] leading-[1.55] transition-colors duration-500 ${active ? 'text-bone/75' : 'text-bone/40'}`}>
+        <p className={`mt-3 max-w-xs text-[13px] sm:text-[14px] leading-[1.5] sm:leading-[1.55] transition-colors duration-500 ${active ? 'text-bone/75' : 'text-bone/40'}`}>
           {phase.l}
         </p>
       </div>
@@ -110,6 +110,11 @@ export default function EngagementModel() {
     if (typeof window === 'undefined') return
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     gsap.registerPlugin(ScrollTrigger)
+
+    // Mobile browsers fire `resize` every time the address bar collapses or
+    // expands. Without this, each of those fired a full refresh mid-scroll and
+    // the pin visibly jumped. Height-only changes are now ignored.
+    ScrollTrigger.config({ ignoreMobileResize: true })
 
     const section = sectionRef.current
     const track = trackRef.current
@@ -149,10 +154,24 @@ export default function EngagementModel() {
       },
     })
 
-    const refresh = () => { distance = getDistance(); ScrollTrigger.refresh() }
+    // Only re-measure when the *width* actually changed (a real rotation or
+    // resize), not on the height-only events an address bar produces.
+    let lastWidth = window.innerWidth
+    const refresh = () => {
+      if (window.innerWidth === lastWidth) return
+      lastWidth = window.innerWidth
+      distance = getDistance()
+      ScrollTrigger.refresh()
+    }
+    const onOrientation = () => {
+      // Wait for the post-rotation layout to settle before measuring.
+      setTimeout(() => { lastWidth = window.innerWidth; distance = getDistance(); ScrollTrigger.refresh() }, 250)
+    }
     window.addEventListener('resize', refresh)
+    window.addEventListener('orientationchange', onOrientation)
     return () => {
       window.removeEventListener('resize', refresh)
+      window.removeEventListener('orientationchange', onOrientation)
       tween.scrollTrigger?.kill()
       tween.kill()
     }
@@ -162,37 +181,38 @@ export default function EngagementModel() {
     <section
       ref={sectionRef}
       id="engagement-model"
-      className="relative border-t border-hairline bg-pine overflow-hidden"
-      style={{ height: '100vh' }}
+      className="em-section relative border-t border-hairline bg-pine overflow-hidden"
     >
       {/* Header (fixed above the horizontal track) */}
-      <div className="container pt-14 md:pt-16 pb-6 md:pb-8">
-        <div className="grid grid-cols-12 gap-6 items-end">
-          <div className="col-span-12 md:col-span-7">
+      <div className="container pt-10 sm:pt-14 md:pt-16 pb-5 sm:pb-6 md:pb-8">
+        <div className="grid grid-cols-12 gap-y-4 gap-x-0 md:gap-6 items-end">
+          <div className="col-span-12 md:col-span-7 min-w-0">
             <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-3">
               <span className="inline-block w-8 h-px bg-signal" /> 04 · Engagement Model
             </div>
             <h2 className="font-editorial text-4xl md:text-5xl lg:text-[3.5rem] font-semibold leading-[1.02] tracking-tight text-balance">
               A single arc. <span className="text-bone/50 italic">Four disciplined phases.</span>
             </h2>
-            <p className="mt-4 max-w-lg text-[14px] leading-[1.55] text-bone/65">
+            <p className="mt-3 sm:mt-4 max-w-lg text-[13px] sm:text-[14px] leading-[1.5] sm:leading-[1.55] text-bone/65">
               Every Waste Wright Consultancy engagement follows one continuous arc — from field-level diagnostics to board-level disclosure. Scroll to advance the model; the phase you're inside will always light up.
             </p>
           </div>
-          <div className="col-span-12 md:col-span-5">
-            {/* Step markers */}
-            <div className="flex items-center gap-4 md:justify-end">
+          <div className="col-span-12 md:col-span-5 min-w-0">
+            {/* Step markers — four full labels sat on one unwrapped row, which
+                needed ~360px of width and overflowed every phone. They now wrap
+                to two rows and tighten their tracking below sm. */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-4 md:justify-end">
               {PHASES.map((p, i) => (
                 <div key={p.n} data-step data-active={i === 0 ? 'true' : 'false'} className="flex items-center gap-2 group">
-                  <span className="step-dot inline-block h-2 w-2 rounded-full border border-bone/30 transition-all duration-500" />
-                  <span className="step-label font-mono2 text-[10px] tracking-[0.3em] uppercase text-bone/40 transition-colors duration-500">
+                  <span className="step-dot inline-block h-2 w-2 shrink-0 rounded-full border border-bone/30 transition-all duration-500" />
+                  <span className="step-label font-mono2 text-[10px] tracking-[0.15em] sm:tracking-[0.3em] uppercase text-bone/40 transition-colors duration-500">
                     {p.t}
                   </span>
                 </div>
               ))}
             </div>
             {/* Progress bar */}
-            <div className="mt-4 h-px w-full bg-hairline overflow-hidden">
+            <div className="mt-3 sm:mt-4 h-px w-full bg-hairline overflow-hidden">
               <div ref={progressRef} className="h-full w-full bg-signal origin-left" style={{ transform: 'scaleX(0)' }} />
             </div>
           </div>
@@ -215,9 +235,9 @@ export default function EngagementModel() {
       </div>
 
       {/* Hairline base */}
-      <div className="container pt-6">
+      <div className="container pt-5 sm:pt-6">
         <div className="hairline" />
-        <div className="mt-3 flex justify-between font-mono2 text-[10px] tracking-widest uppercase text-bone/40">
+        <div className="mt-3 flex flex-col gap-1 sm:flex-row sm:justify-between font-mono2 text-[9px] sm:text-[10px] tracking-widest uppercase text-bone/40">
           <span>Median engagement · 14–22 months</span>
           <span>Board-level accountability throughout</span>
         </div>
@@ -225,6 +245,12 @@ export default function EngagementModel() {
 
       {/* Data-attribute driven styles (scoped) */}
       <style jsx>{`
+        /* 100vh on a mobile browser measures the viewport with the address bar
+           collapsed, so the pinned section was taller than what you can
+           actually see and left dead scroll space. dvh tracks the real
+           visible height; the vh line stays as the fallback. On desktop the
+           two are identical. */
+        .em-section { height: 100vh; height: 100dvh; }
         [data-phase][data-active='true'] :global(h3) { color: #F4F1E9; }
         [data-phase][data-active='true'] :global(svg) { stroke: #4CC38A; }
         [data-phase][data-active='true'] :global(p) { color: rgba(244,241,233,0.78); }

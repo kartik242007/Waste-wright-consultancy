@@ -195,11 +195,16 @@ export default function AboutUs() {
   ]
 
   return (
-    <section id="about" ref={sectionRef} className="relative py-28 md:py-32 border-t border-hairline">
+    <section id="about" ref={sectionRef} className="relative py-20 sm:py-28 md:py-32 border-t border-hairline">
       <div className="container">
-        <div className="grid grid-cols-12 gap-8 lg:gap-12 items-center">
+        {/* A 12-column grid reserves 11 column gaps whatever the children do,
+            so `gap-8` alone demanded 352px before any content — wider than a
+            320px phone. The column gap is dropped until the grid actually goes
+            multi-column at lg:; the row gap that does the stacked spacing
+            stays. lg: and up is unchanged. */}
+        <div className="grid grid-cols-12 gap-y-8 gap-x-0 lg:gap-12 items-center">
           {/* Text block \u2014 unchanged copy + position */}
-          <div className="col-span-12 lg:col-span-7">
+          <div className="col-span-12 lg:col-span-7 min-w-0">
             <div data-au-reveal className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-6">
               <span className="inline-block w-8 h-px bg-signal" /> 01 · About Us
             </div>
@@ -222,7 +227,7 @@ export default function AboutUs() {
           </div>
 
           {/* Animation panel \u2014 replaces the previous dot-grid */}
-          <div data-au-reveal className="col-span-12 lg:col-span-5">
+          <div data-au-reveal className="col-span-12 lg:col-span-5 min-w-0">
             <div className="relative aspect-[4/3] rounded-lg surface-gradient border border-hairline overflow-hidden cursor-pointer">
               <svg ref={svgRef} viewBox={`0 0 ${VB_W} ${VB_H}`} width="100%" height="100%" className="block">
                 {/* Guide lines (behind fragments) */}
@@ -282,11 +287,18 @@ export default function AboutUs() {
               </svg>
 
               {/* Labels overlaid on the panel — keeps parity with hero's data-lab styling */}
-              <div className="absolute top-4 left-4 font-mono2 text-[10px] tracking-widest text-bone/45 uppercase">FIG.01 · RECLAMATION SEQUENCE</div>
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between font-mono2 text-[10px] tracking-widest text-bone/45 uppercase pointer-events-none">
+              {/* Both corner labels shrink below sm — at 10px they needed
+                  ~290px of a 272px-wide panel and ran into each other. */}
+              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 font-mono2 text-[8px] sm:text-[10px] tracking-widest text-bone/45 uppercase">FIG.01 · RECLAMATION SEQUENCE</div>
+              <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 flex justify-between font-mono2 text-[8px] sm:text-[10px] tracking-widest text-bone/45 uppercase pointer-events-none">
                 <span>INPUT</span><span className="text-bone/70">→</span><span className="text-signal">RECOVERED VALUE</span>
               </div>
-              <div className="absolute top-4 right-4 font-mono2 text-[10px] tracking-widest text-signal uppercase">Hover to replay</div>
+              {/* The replay is already wired to `click` as well as
+                  `mouseenter`, so touch works — the label just has to say so. */}
+              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 font-mono2 text-[8px] sm:text-[10px] tracking-widest text-signal uppercase">
+                <span className="lg:hidden">Tap to replay</span>
+                <span className="hidden lg:inline">Hover to replay</span>
+              </div>
             </div>
           </div>
         </div>

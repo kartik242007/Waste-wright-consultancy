@@ -48,13 +48,13 @@ function Nav() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-pine/60 border-b border-hairline">
       <div className="container flex h-16 items-center justify-between">
-        <a href="#" className="flex items-center gap-2.5">
-          <svg width="26" height="26" viewBox="0 0 120 120" fill="none">
+        <a href="#" className="flex items-center gap-2.5 min-w-0">
+          <svg width="26" height="26" viewBox="0 0 120 120" fill="none" className="shrink-0">
             <circle cx="60" cy="60" r="42" stroke="#F4F1E9" strokeWidth="2" fill="none" />
             <path d="M60 18 A42 42 0 0 1 102 60" stroke="#4CC38A" strokeWidth="3" fill="none" strokeLinecap="round" />
             <circle cx="102" cy="60" r="4" fill="#C9A227" />
           </svg>
-          <span className="font-editorial text-[19px] tracking-tight">Waste Wright<span className="text-signal">.</span></span>
+          <span className="font-editorial text-[17px] sm:text-[19px] tracking-tight truncate">Waste Wright<span className="text-signal">.</span></span>
         </a>
         <nav className="hidden md:flex items-center gap-9 text-[13px] text-bone/70">
           {[
@@ -66,8 +66,12 @@ function Nav() {
             <a key={l} href={h} className="hover:text-bone transition-colors">{l}</a>
           ))}
         </nav>
-        <a href="#contact" className="btn-liquid magnetic inline-flex items-center gap-2 px-4 py-2 rounded-full border border-bone/25 text-[13px] hover:border-signal hover:text-pine hover:bg-signal transition-colors">
-          Book briefing <ArrowUpRight size={14} />
+        {/* Logo + full CTA label needed ~328px of a 320px bar. The label
+            shortens below sm; the button keeps its 44px tap height. */}
+        <a href="#contact" className="btn-liquid magnetic inline-flex shrink-0 items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-2 rounded-full border border-bone/25 text-[13px] hover:border-signal hover:text-pine hover:bg-signal transition-colors">
+          <span className="sm:hidden">Book</span>
+          <span className="hidden sm:inline">Book briefing</span>
+          <ArrowUpRight size={14} className="shrink-0" />
         </a>
       </div>
     </header>
@@ -77,12 +81,15 @@ function Nav() {
 /* Hero — badges localized to India */
 function Hero() {
   return (
-    <section className="relative min-h-[100svh] pt-28 pb-24 overflow-hidden">
+    // Below md the orbit gets a dedicated band under the copy instead of
+    // sitting behind it — at 320px the chips were landing on top of the
+    // paragraph. md: and up keeps pb-24 exactly as before.
+    <section className="relative min-h-[100svh] pt-28 pb-[290px] md:pb-24 overflow-hidden">
       <div className="absolute inset-0 radial-fade pointer-events-none" />
       <div className="absolute inset-0 noise-overlay opacity-[0.35] pointer-events-none mix-blend-overlay" />
       <div className="absolute inset-0 -z-0 opacity-90"><Suspense fallback={null}><HeroOrbit /></Suspense></div>
       <div className="container relative z-10 pointer-events-none">
-        <div className="grid grid-cols-12 gap-6 items-end min-h-[80svh]">
+        <div className="grid grid-cols-12 gap-y-6 gap-x-0 md:gap-6 items-end min-h-[80svh]">
           <div className="col-span-12 md:col-span-9 self-center md:-translate-y-16">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
@@ -155,7 +162,7 @@ function Services() {
   return (
     <section id="services" className="py-28 md:py-36 border-t border-hairline">
       <div className="container">
-        <div className="grid grid-cols-12 gap-6 mb-16">
+        <div className="grid grid-cols-12 gap-y-6 gap-x-0 md:gap-6 mb-16">
           <div className="col-span-12 md:col-span-4">
             <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-4">
               <span className="inline-block w-8 h-px bg-signal" /> 02 · Services
@@ -220,13 +227,13 @@ function Impact() {
 /* CASE STUDY — Pune municipal corporation */
 function CaseStudy() {
   return (
-    <section id="case-studies" className="py-28 md:py-36 border-t border-hairline">
+    <section id="case-studies" className="py-20 sm:py-28 md:py-36 border-t border-hairline">
       <div className="container">
         <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-8">
-          <span className="inline-block w-8 h-px bg-signal" /> 06 · Featured Engagement
+          <span className="inline-block w-8 h-px bg-signal shrink-0" /> 06 · Featured Engagement
         </div>
-        <div className="grid grid-cols-12 gap-10 items-center">
-          <div className="col-span-12 lg:col-span-5">
+        <div className="grid grid-cols-12 gap-y-10 gap-x-0 lg:gap-10 items-center">
+          <div className="col-span-12 lg:col-span-5 min-w-0">
             <div className="font-mono2 text-[11px] tracking-widest uppercase text-bone/50 mb-4">Case · CS-114 · Pune</div>
             <h3 className="font-editorial text-display-lg font-semibold text-balance">
               Rebuilding a municipal corporation's waste ledger — <span className="italic text-signal">82% diversion in 18 months.</span>
@@ -234,14 +241,14 @@ function CaseStudy() {
             <p className="mt-8 text-[15px] leading-[1.7] text-bone/65 max-w-lg">
               A tier-1 Indian municipal corporation faced mounting non-compliance risk under the Solid Waste Management Rules and rising landfill costs. Waste Wright Consultancy designed the diagnostic protocol, modernised two material recovery facilities, and stood up a compliance data-layer feeding directly into CPCB reporting and the corporation's BRSR disclosures.
             </p>
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-hairline pt-8">
-              <div><div className="font-editorial text-3xl text-signal">82%</div><div className="mt-1 text-[11px] tracking-widest uppercase text-bone/45 font-mono2">Diversion</div></div>
-              <div><div className="font-editorial text-3xl">₹34 Cr</div><div className="mt-1 text-[11px] tracking-widest uppercase text-bone/45 font-mono2">Saved / yr</div></div>
-              <div><div className="font-editorial text-3xl text-brass">18 mo</div><div className="mt-1 text-[11px] tracking-widest uppercase text-bone/45 font-mono2">To full-scale</div></div>
+            <div className="mt-10 grid grid-cols-3 gap-3 sm:gap-6 border-t border-hairline pt-8">
+              <div className="min-w-0"><div className="font-editorial text-2xl sm:text-3xl text-signal">82%</div><div className="mt-1 text-[10px] sm:text-[11px] tracking-wider sm:tracking-widest uppercase text-bone/45 font-mono2">Diversion</div></div>
+              <div className="min-w-0"><div className="font-editorial text-2xl sm:text-3xl">₹34 Cr</div><div className="mt-1 text-[10px] sm:text-[11px] tracking-wider sm:tracking-widest uppercase text-bone/45 font-mono2">Saved / yr</div></div>
+              <div className="min-w-0"><div className="font-editorial text-2xl sm:text-3xl text-brass">18 mo</div><div className="mt-1 text-[10px] sm:text-[11px] tracking-wider sm:tracking-widest uppercase text-bone/45 font-mono2">To full-scale</div></div>
             </div>
-            <a href="#contact" className="mt-12 inline-flex items-center gap-2 text-[14px] border-b border-signal/60 pb-1 hover:gap-4 transition-all">Read the full engagement <ArrowRight size={14} /></a>
+            <a href="#contact" className="mt-10 sm:mt-12 inline-flex items-center gap-2 text-[14px] border-b border-signal/60 pb-1 min-h-[44px] lg:min-h-0 hover:gap-4 transition-all">Read the full engagement <ArrowRight size={14} className="shrink-0" /></a>
           </div>
-          <div className="col-span-12 lg:col-span-7"><BeforeAfter /></div>
+          <div className="col-span-12 lg:col-span-7 min-w-0"><BeforeAfter /></div>
         </div>
       </div>
     </section>
@@ -251,15 +258,15 @@ function BeforeAfter() {
   const [pos, setPos] = useState(50)
   return (
     <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-hairline select-none">
-      <div className="absolute inset-0 bg-graphite p-10">
+      <div className="absolute inset-0 bg-graphite p-5 sm:p-10">
         <div className="font-mono2 text-[10px] tracking-widest uppercase text-bone/50">Before · 2023</div>
-        <div className="mt-8 flex items-end gap-2 h-[calc(100%-4rem)]">
+        <div className="mt-6 sm:mt-8 flex items-end gap-1 sm:gap-2 h-[calc(100%-4rem)]">
           {[32, 74, 22, 58, 88, 42, 62, 84, 28, 70, 46, 80].map((h, i) => (<div key={i} className="flex-1 bg-bone/25" style={{ height: `${h}%` }} />))}
         </div>
       </div>
-      <div className="absolute inset-0 bg-pine2 p-10" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
+      <div className="absolute inset-0 bg-pine2 p-5 sm:p-10" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
         <div className="font-mono2 text-[10px] tracking-widest uppercase text-signal">After · 2024</div>
-        <div className="mt-8 flex items-end gap-2 h-[calc(100%-4rem)]">
+        <div className="mt-6 sm:mt-8 flex items-end gap-1 sm:gap-2 h-[calc(100%-4rem)]">
           {[72, 78, 82, 76, 86, 80, 84, 88, 82, 86, 90, 92].map((h, i) => (<div key={i} className="flex-1 bg-signal/80 shadow-[0_0_20px_-2px_rgba(76,195,138,0.5)]" style={{ height: `${h}%` }} />))}
         </div>
       </div>
@@ -277,11 +284,11 @@ function BeforeAfter() {
 /* Closing CTA — contact form added, impact-report download removed */
 function CTA() {
   return (
-    <section id="contact" className="py-28 md:py-36 border-t border-hairline relative overflow-hidden">
+    <section id="contact" className="py-20 sm:py-28 md:py-36 border-t border-hairline relative overflow-hidden">
       <div className="absolute inset-0 radial-fade pointer-events-none" />
       <div className="container relative">
-        <div className="grid grid-cols-12 gap-10 lg:gap-16 items-start">
-          <div className="col-span-12 lg:col-span-6">
+        <div className="grid grid-cols-12 gap-y-10 gap-x-0 lg:gap-16 items-start">
+          <div className="col-span-12 lg:col-span-6 min-w-0">
             <div className="flex items-center gap-3 text-[13px] tracking-[0.35em] uppercase text-signal font-mono2 font-semibold mb-6">
               <span className="inline-block w-8 h-px bg-signal" /> Begin
             </div>
@@ -298,13 +305,13 @@ function CTA() {
             </div>
 
             {/* Direct-line meta */}
-            <div className="mt-14 grid grid-cols-2 gap-6 border-t border-hairline pt-8 max-w-md">
-              <div>
+            <div className="mt-12 sm:mt-14 grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-hairline pt-8 max-w-md">
+              <div className="min-w-0">
                 <div className="font-mono2 text-[10px] tracking-[0.3em] uppercase text-bone/45 mb-2">Direct line</div>
-                <div className="text-[14px] text-bone/80">partners@wastewright.in</div>
+                <div className="text-[14px] text-bone/80 break-words">partners@wastewright.in</div>
                 <div className="text-[14px] text-bone/60">+91 22 6816 5100</div>
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="font-mono2 text-[10px] tracking-[0.3em] uppercase text-bone/45 mb-2">Response time</div>
                 <div className="text-[14px] text-bone/80">Within one business day</div>
                 <div className="text-[14px] text-bone/60">IST · Mon–Fri</div>
@@ -313,8 +320,8 @@ function CTA() {
           </div>
 
           {/* Form */}
-          <div id="form" className="col-span-12 lg:col-span-6">
-            <div className="rounded-lg border border-hairline bg-graphite/40 p-8 md:p-10">
+          <div id="form" className="col-span-12 lg:col-span-6 min-w-0">
+            <div className="rounded-lg border border-hairline bg-graphite/40 p-6 sm:p-8 md:p-10">
               <div className="flex items-center gap-3 text-[10px] tracking-[0.35em] uppercase text-bone/55 font-mono2 mb-8">
                 <span className="inline-block w-6 h-px bg-signal" /> Request a briefing
               </div>
@@ -332,7 +339,7 @@ function Footer() {
   return (
     <footer className="border-t border-hairline py-16">
       <div className="container">
-        <div className="grid grid-cols-12 gap-6">
+        <div className="grid grid-cols-12 gap-y-10 gap-x-4 md:gap-6">
           <div className="col-span-12 md:col-span-5">
             <div className="font-editorial text-4xl">Waste Wright<span className="text-signal">.</span></div>
             <p className="mt-4 max-w-sm text-[13px] text-bone/55 leading-relaxed">Waste Wright Consultancy is an Indian strategy and engineering consultancy in the circular economy.</p>
