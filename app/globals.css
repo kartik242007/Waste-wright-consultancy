@@ -115,6 +115,12 @@
     animation: sheen 0.9s cubic-bezier(.2,.8,.2,1);
   }
 
+  /* A disabled submit must read as inactive — kill the liquid fill and the
+     sheen sweep, which :hover would otherwise still trigger on a disabled
+     button. */
+  .btn-liquid:disabled::before,
+  .btn-liquid:disabled::after { display: none; }
+
   .grid-lines {
     background-image: linear-gradient(to right, rgba(244,241,233,0.05) 1px, transparent 1px);
     background-size: calc(100%/12) 100%;

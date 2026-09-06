@@ -6,8 +6,12 @@ import { Check } from 'lucide-react'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { SERVICES } from './servicesData'
+import {
+  useFormValidation, validateEmail, validatePhone, validateRequired,
+  FieldError, fieldBorder, submitState,
+} from './formValidation'
 
-function Field({ label, name, type = 'text', required = false, value, onChange }) {
+function Field({ label, name, type = 'text', required = false, value, onChange, onBlur, error }) {
   return (
     <label className="block">
       <span className="font-mono2 text-[10px] tracking-[0.3em] uppercase text-bone/55 flex items-center gap-2">
@@ -18,19 +22,31 @@ function Field({ label, name, type = 'text', required = false, value, onChange }
         name={name}
         value={value}
         onChange={onChange}
-        required={required}
-        className="mt-2 w-full bg-transparent border-0 border-b border-hairline focus:border-signal outline-none py-2 text-[15px] text-bone placeholder-bone/30 transition-colors"
+        onBlur={onBlur}
+        aria-invalid={!!error}
+        className={`mt-2 w-full bg-transparent border-0 border-b outline-none py-2 text-[15px] text-bone placeholder-bone/30 transition-colors ${fieldBorder(error)}`}
         placeholder=" "
       />
+      <FieldError>{error}</FieldError>
     </label>
   )
 }
+
+// Every field in the popup is required, Phone included.
+const validate = (v) => ({
+  name:    validateRequired(v.name, 'Enter your name'),
+  company: validateRequired(v.company, 'Enter your company name'),
+  phone:   validatePhone(v.phone),
+  email:   validateEmail(v.email),
+  service: validateRequired(v.service, 'Select the service you need'),
+})
 
 export default function LeadCaptureModal() {
   const [open, setOpen] = useState(false)
   const [data, setData] = useState({ name: '', company: '', phone: '', email: '', service: '' })
   const [sent, setSent] = useState(false)
   const set = (k) => (e) => setData((d) => ({ ...d, [k]: e.target.value }))
+  const { isValid, errorFor, blurHandler, markSubmitted } = useFormValidation(data, validate)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -49,6 +65,8 @@ export default function LeadCaptureModal() {
 
   const onSubmit = (e) => {
     e.preventDefault()
+    markSubmitted()
+    if (!isValid) return
     setSent(true)
   }
 
@@ -106,18 +124,24 @@ export default function LeadCaptureModal() {
                   Tell us who you are and what you need — a partner will follow up within one business day.
                 </p>
 
-                <form onSubmit={onSubmit} className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6">
-                  <div className="col-span-2 md:col-span-1"><Field label="Your name" name="name" value={data.name} onChange={set('name')} required /></div>
-                  <div className="col-span-2 md:col-span-1"><Field label="Company name" name="company" value={data.company} onChange={set('company')} required /></div>
-                  <div className="col-span-2 md:col-span-1"><Field label="Phone" name="phone" type="tel" value={data.phone} onChange={set('phone')} required /></div>
-                  <div className="col-span-2 md:col-span-1"><Field label="Email" name="email" type="email" value={data.email} onChange={set('email')} required /></div>
+                <form onSubmit={onSubmit} noValidate className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6">
+                  <div className="col-span-2 md:col-span-1"><Field label="Your name" name="name" value={data.name} onChange={set('name')} onBlur={blurHandler('name')} error={errorFor('name')} required /></div>
+                  <div className="col-span-2 md:col-span-1"><Field label="Company name" name="company" value={data.company} onChange={set('company')} onBlur={blurHandler('company')} error={errorFor('company')} required /></div>
+                  <div className="col-span-2 md:col-span-1"><Field label="Phone" name="phone" type="tel" value={data.phone} onChange={set('phone')} onBlur={blurHandler('phone')} error={errorFor('phone')} required /></div>
+                  <div className="col-span-2 md:col-span-1"><Field label="Email" name="email" type="email" value={data.email} onChange={set('email')} onBlur={blurHandler('email')} error={errorFor('email')} required /></div>
 
                   <div className="col-span-2">
-                    <span className="font-mono2 text-[10px] tracking-[0.3em] uppercase text-bone/55 flex items-center gap-2 mb-2">
+                    {/* block, not flex — keeps the asterisk beside the text
+                        when this long label wraps on a narrow screen */}
+                    <span className="font-mono2 text-[10px] leading-[1.6] tracking-[0.3em] uppercase text-bone/55 block mb-2">
                       Which service do you need? <span className="text-signal">*</span>
                     </span>
-                    <Select value={data.service} onValueChange={(v) => setData((d) => ({ ...d, service: v }))} required>
-                      <SelectTrigger className="w-full bg-transparent border-0 border-b border-hairline rounded-none focus:ring-0 focus:border-signal text-[15px] text-bone h-auto py-2 px-0">
+                    <Select value={data.service} onValueChange={(v) => setData((d) => ({ ...d, service: v }))}>
+                      <SelectTrigger
+                        aria-invalid={!!errorFor('service')}
+                        onBlur={blurHandler('service')}
+                        className={`w-full bg-transparent border-0 border-b rounded-none focus:ring-0 text-[15px] text-bone h-auto py-2 px-0 ${fieldBorder(errorFor('service'))}`}
+                      >
                         <SelectValue placeholder="Select a service" />
                       </SelectTrigger>
                       <SelectContent className="bg-graphite border-hairline text-bone">
@@ -126,10 +150,15 @@ export default function LeadCaptureModal() {
                         ))}
                       </SelectContent>
                     </Select>
+                    <FieldError>{errorFor('service')}</FieldError>
                   </div>
 
                   <div className="col-span-2 pt-2">
-                    <button type="submit" className="btn-liquid magnetic w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-signal text-pine2 font-medium text-[14px] hover:shadow-[0_0_40px_-4px_rgba(76,195,138,0.6)] transition-shadow">
+                    <button
+                      type="submit"
+                      disabled={!isValid}
+                      className={`btn-liquid magnetic w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-signal text-pine2 font-medium text-[14px] transition-shadow ${submitState(isValid)}`}
+                    >
                       Request a briefing
                     </button>
                   </div>

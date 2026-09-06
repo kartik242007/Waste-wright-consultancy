@@ -30,13 +30,19 @@ const FRAGS = [
   { id: 'f8', type: 'cap',   x: 370, y: 155, rot: 44  },
 ]
 
-// Ordered bar-chart output positions & heights
+/* Ordered bar-chart output positions & heights.
+   Categories map to real Waste Wright service lines (servicesData.js):
+   green = waste streams recovered (Plastic / Battery / Tyre EPR),
+   gold  = compliance tonnage certified (EPR credits, audit-verified).
+   Values are proportional to bar height at a constant ~9.05 t per unit,
+   so the numbers and the geometry agree. Figures are illustrative —
+   see the caption beneath the figure. */
 const BARS = [
-  { x: 108, w: 30, h: 62,  fill: '#4AE8A0' },
-  { x: 152, w: 30, h: 108, fill: '#4AE8A0' },
-  { x: 196, w: 30, h: 82,  fill: '#C9A227' },
-  { x: 240, w: 30, h: 136, fill: '#4AE8A0' },
-  { x: 284, w: 30, h: 100, fill: '#C9A227' },
+  { x: 108, w: 30, h: 62,  fill: '#4AE8A0', v: '560 t',   c: ['Plastic'] },
+  { x: 152, w: 30, h: 108, fill: '#4AE8A0', v: '980 t',   c: ['Battery'] },
+  { x: 196, w: 30, h: 82,  fill: '#C9A227', v: '740 t',   c: ['EPR', 'Credits'] },
+  { x: 240, w: 30, h: 136, fill: '#4AE8A0', v: '1,240 t', c: ['Tyres'] },
+  { x: 284, w: 30, h: 100, fill: '#C9A227', v: '910 t',   c: ['Audit', 'Verified'] },
 ]
 const BAR_BASE_Y = 244
 
@@ -118,6 +124,7 @@ export default function AboutUs() {
         gsap.set('.frag', { autoAlpha: 0 })
         gsap.set('.guide', { opacity: 0 })
         gsap.set('.bar', { autoAlpha: 1, scaleY: 1, transformOrigin: 'bottom center' })
+        gsap.set(['.bar-value', '.bar-cat', '.chart-legend'], { autoAlpha: 1 })
         gsap.set('.bloom', { opacity: 0.2, scale: 1 })
         return
       }
@@ -126,6 +133,7 @@ export default function AboutUs() {
       gsap.set('.frag',  { autoAlpha: 0, scale: 1, transformOrigin: '50% 50%' })
       gsap.set('.guide', { opacity: 0 })
       gsap.set('.bar',   { autoAlpha: 0, scaleY: 0, transformOrigin: 'bottom center' })
+      gsap.set(['.bar-value', '.bar-cat', '.chart-legend'], { autoAlpha: 0 })
       gsap.set('.bloom', { opacity: 0, scale: 0.3, transformOrigin: 'center center' })
 
       const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.inOut' } })
@@ -157,6 +165,11 @@ export default function AboutUs() {
       tl.to('.bloom', { opacity: 0.55, scale: 1.15, duration: 0.6, ease: 'power2.out' }, 2.15)
       tl.to('.bar',   { autoAlpha: 1, duration: 0.2 }, 2.2)
       tl.to('.bar',   { scaleY: 1, duration: 0.9, ease: 'power3.out', stagger: 0.08 }, 2.25)
+      // Labels resolve alongside their bars rather than sitting there
+      // pre-rendered before the sequence runs.
+      tl.to('.bar-value', { autoAlpha: 1, duration: 0.4, stagger: 0.08, ease: 'power2.out' }, 2.45)
+      tl.to('.bar-cat',   { autoAlpha: 1, duration: 0.4, stagger: 0.08, ease: 'power2.out' }, 2.5)
+      tl.to('.chart-legend', { autoAlpha: 1, duration: 0.5, ease: 'power2.out' }, 2.65)
       tl.to('.bloom', { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 2.8)
 
       tlRef.current = tl
@@ -189,9 +202,8 @@ export default function AboutUs() {
 
   const chips = [
     'Founded in 2024',
-    '12+ Indian states',
+    'Pan India',
     'Six practice areas',
-    'ISO 14001 certified',
   ]
 
   return (
@@ -252,6 +264,47 @@ export default function AboutUs() {
                   ))}
                   {/* baseline */}
                   <line x1={90} y1={BAR_BASE_Y + 0.5} x2={330} y2={BAR_BASE_Y + 0.5} stroke="rgba(244,241,233,0.25)" strokeWidth="1" />
+
+                  {/* Value above each bar — mono, matching the FIG.01 label */}
+                  {BARS.map((b, i) => (
+                    <text
+                      key={'val-'+i}
+                      className="bar-value"
+                      x={b.x + b.w / 2} y={BAR_BASE_Y - b.h - 7}
+                      textAnchor="middle"
+                      fontSize="8" letterSpacing="0.5"
+                      fill={b.fill === '#C9A227' ? 'rgba(201,162,39,0.95)' : 'rgba(244,241,233,0.8)'}
+                      style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
+                    >
+                      {b.v}
+                    </text>
+                  ))}
+
+                  {/* Category beneath each bar's base */}
+                  {BARS.map((b, i) => (
+                    <text
+                      key={'cat-'+i}
+                      className="bar-cat"
+                      x={b.x + b.w / 2} y={BAR_BASE_Y + 12}
+                      textAnchor="middle"
+                      fontSize="7" letterSpacing="0.6"
+                      fill="rgba(244,241,233,0.5)"
+                      style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", textTransform: 'uppercase' }}
+                    >
+                      {b.c.map((line, j) => (
+                        <tspan key={j} x={b.x + b.w / 2} dy={j === 0 ? 0 : 8}>{line.toUpperCase()}</tspan>
+                      ))}
+                    </text>
+                  ))}
+                </g>
+
+                {/* Legend — sits left of the bars, clear of the FIG.01 label
+                    above and the INPUT → RECOVERED VALUE row below */}
+                <g className="chart-legend" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}>
+                  <circle cx="15" cy="70" r="2.5" fill="#4AE8A0" />
+                  <text x="23" y="72.5" fontSize="6.5" letterSpacing="0.5" fill="rgba(244,241,233,0.55)">RECOVERED</text>
+                  <circle cx="15" cy="82" r="2.5" fill="#C9A227" />
+                  <text x="23" y="84.5" fontSize="6.5" letterSpacing="0.5" fill="rgba(244,241,233,0.55)">COMPLIANCE YIELD</text>
                 </g>
 
                 {/* Fragments (Beat 1 + 2) */}
@@ -300,6 +353,11 @@ export default function AboutUs() {
                 <span className="hidden lg:inline">Hover to replay</span>
               </div>
             </div>
+            {/* Kept outside the animated figure and always visible — a
+                provenance note should never be hidden behind a replay. */}
+            <p className="mt-3 font-mono2 text-[9px] sm:text-[10px] leading-[1.5] tracking-[0.08em] text-bone/40">
+              Illustrative output from a representative Waste Wright engagement — figures are directional, not client-specific.
+            </p>
           </div>
         </div>
       </div>
