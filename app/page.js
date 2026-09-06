@@ -208,7 +208,7 @@ function Impact() {
     { v: '2.4M',      l: 'Tonnes diverted from landfill',        c: 'signal' },
     { v: '₹340 Cr',  l: 'Economic value returned to clients',   c: 'brass'  },
     { v: '48',        l: 'Enterprise engagements delivered',       c: 'bone'   },
-    { v: '12+',       l: 'Indian states under active advisory',    c: 'bone'   },
+    { v: 'Pan India', l: 'Active advisory coverage',               c: 'bone'   },
   ]
   return (
     <section className="py-28 border-t border-hairline">

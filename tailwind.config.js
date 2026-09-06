@@ -38,6 +38,10 @@ module.exports = {
         // Gold
         brass:    '#C9A227',   // --gold (unchanged)
 
+        // Form-error tone — muted terracotta rust, not alert-red. Sits in the
+        // same desaturated register as brass and clears 6:1 contrast on pine.
+        rust:     '#DB7C6E',
+
         // Hairline / semantic aliases
         hairline: 'rgba(244,241,233,0.10)',
         border:   'rgba(244,241,233,0.10)',
