@@ -10,6 +10,7 @@ import {
   useFormValidation, validateEmail, validatePhone, validateRequired,
   FieldError, fieldBorder, submitState,
 } from './formValidation'
+import { submitForm, SUBMIT_ERROR } from './submitForm'
 
 function Field({ label, name, type = 'text', required = false, value, onChange, onBlur, error }) {
   return (
@@ -45,6 +46,8 @@ export default function LeadCaptureModal() {
   const [open, setOpen] = useState(false)
   const [data, setData] = useState({ name: '', company: '', phone: '', email: '', service: '' })
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [failed, setFailed] = useState(false)
   const set = (k) => (e) => setData((d) => ({ ...d, [k]: e.target.value }))
   const { isValid, errorFor, blurHandler, markSubmitted } = useFormValidation(data, validate)
 
@@ -63,11 +66,22 @@ export default function LeadCaptureModal() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     markSubmitted()
-    if (!isValid) return
-    setSent(true)
+    if (!isValid || sending) return
+    setFailed(false)
+    setSending(true)
+    try {
+      await submitForm('briefing', data)
+      setSent(true)
+    } catch (err) {
+      // Entered values are untouched, so nothing the user typed is lost.
+      console.error('[briefing form]', err)
+      setFailed(true)
+    } finally {
+      setSending(false)
+    }
   }
 
   const handleOpenChange = (v) => {
@@ -153,13 +167,21 @@ export default function LeadCaptureModal() {
                     <FieldError>{errorFor('service')}</FieldError>
                   </div>
 
+                  {failed && (
+                    <div className="col-span-2 -mb-2">
+                      <p role="alert" className="font-mono2 text-[10px] leading-[1.5] tracking-[0.12em] uppercase text-rust">
+                        {SUBMIT_ERROR}
+                      </p>
+                    </div>
+                  )}
                   <div className="col-span-2 pt-2">
                     <button
                       type="submit"
-                      disabled={!isValid}
-                      className={`btn-liquid magnetic w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-signal text-pine2 font-medium text-[14px] transition-shadow ${submitState(isValid)}`}
+                      disabled={!isValid || sending}
+                      aria-busy={sending}
+                      className={`btn-liquid magnetic w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-signal text-pine2 font-medium text-[14px] transition-shadow ${submitState(isValid && !sending)}`}
                     >
-                      Request a briefing
+                      {sending ? 'Sending…' : 'Request a briefing'}
                     </button>
                   </div>
                 </form>
