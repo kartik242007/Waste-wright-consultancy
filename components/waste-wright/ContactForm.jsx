@@ -9,6 +9,7 @@ import {
   useFormValidation, validateEmail, validatePhone, validateRequired,
   FieldError, fieldBorder, submitState,
 } from './formValidation'
+import { submitForm, SUBMIT_ERROR } from './submitForm'
 
 function Field({ label, name, type = 'text', required = false, textarea = false, value, onChange, onBlur, error }) {
   const base = `mt-2 w-full bg-transparent border-0 border-b outline-none py-3 sm:py-2 text-[16px] sm:text-[15px] text-bone placeholder-bone/30 transition-colors ${fieldBorder(error)}`
@@ -57,15 +58,27 @@ const validate = (v) => ({
 export default function ContactForm() {
   const [data, setData] = useState({ name: '', company: '', email: '', phone: '', message: '', service: '' })
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [failed, setFailed] = useState(false)
   const set = (k) => (e) => setData((d) => ({ ...d, [k]: e.target.value }))
   const { isValid, errorFor, blurHandler, markSubmitted } = useFormValidation(data, validate)
 
   const onSubmit = async (e) => {
     e.preventDefault()
     markSubmitted()
-    if (!isValid) return
-    // Simple local success state — wire to /api later
-    setSent(true)
+    if (!isValid || sending) return
+    setFailed(false)
+    setSending(true)
+    try {
+      await submitForm('contact', data)
+      setSent(true)
+    } catch (err) {
+      // Entered values are untouched, so nothing the user typed is lost.
+      console.error('[contact form]', err)
+      setFailed(true)
+    } finally {
+      setSending(false)
+    }
   }
 
   // noValidate: errors are surfaced inline, never as a browser tooltip.
@@ -124,16 +137,26 @@ export default function ContactForm() {
           </div>
           {/* Below sm the reply-time note and the button were fighting over one
               row; the button now takes the full width above its own caption. */}
+          {/* Delivery failure sits directly above the submit row so it reads
+              as a submission problem, not a field problem. */}
+          {failed && (
+            <div className="col-span-2 -mb-2">
+              <p role="alert" className="font-mono2 text-[10px] leading-[1.5] tracking-[0.12em] uppercase text-rust">
+                {SUBMIT_ERROR}
+              </p>
+            </div>
+          )}
           <div className="col-span-2 flex flex-col-reverse items-stretch gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
             <div className="font-mono2 text-[10px] tracking-widest uppercase text-bone/40 text-center sm:text-left">
               We reply within one business day
             </div>
             <button
               type="submit"
-              disabled={!isValid}
-              className={`btn-liquid magnetic inline-flex w-full sm:w-auto items-center justify-center sm:justify-start gap-3 px-6 py-3.5 rounded-full bg-signal text-pine2 font-medium text-[14px] transition-shadow ${submitState(isValid)}`}
+              disabled={!isValid || sending}
+              aria-busy={sending}
+              className={`btn-liquid magnetic inline-flex w-full sm:w-auto items-center justify-center sm:justify-start gap-3 px-6 py-3.5 rounded-full bg-signal text-pine2 font-medium text-[14px] transition-shadow ${submitState(isValid && !sending)}`}
             >
-              Request a briefing
+              {sending ? 'Sending…' : 'Request a briefing'}
             </button>
           </div>
         </div>
